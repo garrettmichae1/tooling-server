@@ -11,5 +11,8 @@ var transcription string
 //go:embed AGENT_DIRECTIONS.md
 var artDirections string
 
+//go:embed QUICKSTART.md
+var Quickstart string
+
 // Transcription is what GET /v1/guide returns.
 var Transcription = transcription + "\n\n" + artDirections

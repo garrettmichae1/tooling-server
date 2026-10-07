@@ -4,6 +4,7 @@ package chart
 import (
 	"bytes"
 	"context"
+	"edsger.local/figureserver/internal/artifact"
 	"encoding/json"
 	"errors"
 	"io"
@@ -109,16 +110,16 @@ func (c Compiler) Compile(ctx context.Context, raw json.RawMessage) ([]byte, err
 			return nil, ErrCompile
 		}
 	}
-	pdf, err := os.ReadFile(out)
-	if err != nil || !bytes.HasPrefix(pdf, []byte("%PDF")) {
-		return nil, ErrCompile
-	}
 	max := c.MaxPDF
 	if max <= 0 {
 		max = 8 * 1024 * 1024
 	}
-	if len(pdf) > max {
+	pdf, err := artifact.Read(out, max)
+	if errors.Is(err, artifact.ErrTooLarge) {
 		return nil, ErrTooLarge
+	}
+	if err != nil || !bytes.HasPrefix(pdf, []byte("%PDF")) {
+		return nil, ErrCompile
 	}
 	return pdf, nil
 }

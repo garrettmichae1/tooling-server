@@ -3,6 +3,7 @@ package model
 
 import (
 	"context"
+	"edsger.local/figureserver/internal/artifact"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
@@ -105,7 +106,10 @@ func (c Compiler) Render(ctx context.Context, script string) ([]byte, error) {
 			return nil, ErrCompile
 		}
 	}
-	stl, err := os.ReadFile(out)
+	stl, err := artifact.Read(out, stlHeader+maxTriangles*stlTriangle)
+	if errors.Is(err, artifact.ErrTooLarge) {
+		return nil, ErrTooLarge
+	}
 	if err != nil {
 		return nil, ErrCompile
 	}

@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 const (
@@ -39,6 +40,7 @@ type Config struct {
 	MaxPNG        int
 	MaxPDF        int
 	RatePerMinute int
+	ToolsOnly     bool
 }
 
 // FromEnv reads configuration. It fails closed when the token or bind address is unsafe.
@@ -47,8 +49,8 @@ func FromEnv() (Config, error) {
 	if len(token) < MinTokenBytes {
 		return Config{}, errors.New("FIGURE_TOKEN must be at least 32 bytes")
 	}
-	if strings.ContainsAny(token, "\r\n\x00") {
-		return Config{}, errors.New("FIGURE_TOKEN contains a control character")
+	if len(token) > 256 || strings.IndexFunc(token, func(r rune) bool { return unicode.IsSpace(r) || unicode.IsControl(r) }) >= 0 {
+		return Config{}, errors.New("FIGURE_TOKEN must be at most 256 bytes without spaces or control characters")
 	}
 
 	bind := os.Getenv("FIGURE_BIND")
@@ -94,6 +96,12 @@ func FromEnv() (Config, error) {
 		}
 		cfg.MaxSessions = n
 	}
+	if v := os.Getenv("FIGURE_TOOLS_ONLY"); v != "" {
+		if v != "0" && v != "1" {
+			return Config{}, errors.New("FIGURE_TOOLS_ONLY must be 0 or 1")
+		}
+		cfg.ToolsOnly = v == "1"
+	}
 	return cfg, nil
 }
 
@@ -103,7 +111,8 @@ func ValidateBind(addr string) error {
 	if err != nil {
 		return errors.New("FIGURE_BIND must be host:port")
 	}
-	if port == "" || port == "0" {
+	n, parseErr := strconv.Atoi(port)
+	if parseErr != nil || n < 1 || n > 65535 {
 		return errors.New("FIGURE_BIND must use an explicit port")
 	}
 	ip := net.ParseIP(host)

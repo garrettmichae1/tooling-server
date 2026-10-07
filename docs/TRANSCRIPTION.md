@@ -1,5 +1,7 @@
 # Figure transcription guide
 
+For the 32 utility tools (math, data, writing, developer, study, planning, visuals, audio), start with `GET /v1/quickstart` and `GET /v1/tools?category=math`. Their JSON schemas, limits, and working examples are served by the catalog. They use `POST /v1/tools/call` and do not need a session or renderer. The rest of this document describes the legacy figure/PDF/STL tools.
+
 This service draws a **figure**: a poster, icon, diagram, chart, or labeled vector drawing. It returns a PNG.
 
 It does not generate photographs, painterly images, or pictures of people. If the user asks for a photo, a realistic scene, or "an image of" a person, do not call this service. Say that a figure can be a chart, diagram, icon, or poster instead.
@@ -26,7 +28,7 @@ Every request except `GET /health` sends:
 Authorization: Bearer <FIGURE_TOKEN>
 ```
 
-Do not put the token in a query string, a tool argument, or a log line.
+The trusted caller attaches the token. Do not put it in a model prompt, query string, tool argument, or log line.
 
 ## Session
 

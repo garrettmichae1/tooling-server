@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"strings"
 	"testing"
+	"time"
 
 	"edsger.local/figureserver/internal/fakemcp"
 	"edsger.local/figureserver/internal/session"
@@ -17,6 +18,31 @@ func TestMCPHelper(t *testing.T) {
 	}
 	fakemcp.Run()
 	os.Exit(0)
+}
+
+func TestPendingStartupReservesCapacity(t *testing.T) {
+	entered := make(chan struct{})
+	release := make(chan struct{})
+	mgr, err := session.NewManager(session.Config{NewCommand: func() *exec.Cmd { close(entered); <-release; return fakeCommand() }, MaxSessions: 1, MaxCalls: 1})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(mgr.Close)
+	result := make(chan error, 1)
+	go func() { _, err := mgr.Create(context.Background()); result <- err }()
+	select {
+	case <-entered:
+	case <-time.After(2 * time.Second):
+		t.Fatal("startup did not enter")
+	}
+	_, secondErr := mgr.Create(context.Background())
+	close(release)
+	if secondErr != session.ErrBusy {
+		t.Fatalf("pending startup did not reserve capacity: %v", secondErr)
+	}
+	if err := <-result; err != nil {
+		t.Fatal(err)
+	}
 }
 
 func fakeCommand() *exec.Cmd {
