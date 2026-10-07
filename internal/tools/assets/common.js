@@ -20,5 +20,6 @@ function plot(svg,labels,series,type,active=[]){
   if(type==='line'){svg.append(svgEl('polyline',{points:s.values.map((v,i)=>center(i)+','+y(v)).join(' '),fill:'none',stroke:color,'stroke-width':3}));s.values.forEach((v,i)=>{const c=svgEl('circle',{cx:center(i),cy:y(v),r:4,fill:color});c.append(svgEl('title',{},labels[i]+': '+String(v)));svg.append(c)})}
   else{s.values.forEach((v,i)=>{const width=slot*.8/series.length,x=L+slot*i+slot*.1+j*width;const rect=svgEl('rect',{x,y:Math.min(y(v),y(0)),width:Math.max(.2,width-1),height:Math.abs(y(v)-y(0)),fill:active.includes(i)?'#b45309':color});rect.append(svgEl('title',{},labels[i]+': '+String(v)));svg.append(rect)})}
  });
- const every=Math.max(1,Math.ceil(labels.length/(W<500?4:8)));labels.forEach((label,i)=>{if(i%every===0||i===labels.length-1){const text=String(label);const limit=W<500?9:12;svg.append(svgEl('text',{x:center(i),y:H-25,'text-anchor':'middle',fill:'#526074','font-size':12},text.length>limit?text.slice(0,limit-1)+'…':text))}});
+ const every=Math.max(1,Math.ceil(labels.length/(W<500?4:8)));let lastRight=-Infinity;
+ labels.forEach((label,i)=>{if(i%every!==0&&i!==labels.length-1)return;const text=String(label),limit=W<500?9:12;const tick=svgEl('text',{x:center(i),y:H-25,'text-anchor':'middle',fill:'#526074','font-size':12},text.length>limit?text.slice(0,limit-1)+'…':text);tick.append(svgEl('title',{},text));svg.append(tick);const box=tick.getBBox();if(box.x<lastRight+12||box.x+box.width>W-6)tick.remove();else lastRight=box.x+box.width});
 }
