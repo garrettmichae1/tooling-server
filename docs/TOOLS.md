@@ -1,6 +1,6 @@
 # Tool catalog and model integration
 
-All 32 utilities use the same authenticated API without subscription checks or model-provider credentials. No app or worker code is changed. Existing app/gateway policies still determine whether a particular user or model can reach this service.
+All 38 utilities use the same authenticated API without subscription checks or model-provider credentials. No app or worker code is changed. Existing app/gateway policies still determine whether a particular user or model can reach this service.
 
 ## Tools
 
@@ -38,12 +38,18 @@ All 32 utilities use the same authenticated API without subscription checks or m
 | Developer | `hash_text` | SHA-256/SHA-512 checksums |
 | Developer | `inspect_url` | URL components without fetching |
 | Developer | `generate_uuid` | Random UUIDv4 identifiers |
+| Study | `make_study_app` | Offline interactive quiz, explanations, retry missed, local progress/export |
+| Data | `make_data_dashboard` | Offline interactive line/bar chart, toggles, summaries, exact table, CSV |
+| Study | `make_sorting_lab` | Algorithm animation, single steps, server-computed trace/counters |
+| Visuals | `make_pixel_art` | Scaled transparent PNG and SVG sprites from palette indices |
+| Audio | `make_music_sequence` | Short WAV melodies/rests from MIDI pitches and beat durations |
+| Planning | `plan_project` | Dependency schedule, critical tasks, slack, and CSV export |
 
 Live schemas/examples are the source of truth: `GET /v1/tools`, filtered catalogs, or `GET /v1/tools/{name}`. No utility starts a figure session or calls an external process.
 
 ## Smaller model integration
 
-The caller selects relevant definitions before inference. Fetch a category or specific definitions; do not paste all legacy art instructions or all 32 schemas into every prompt. Use the served quickstart for common instructions.
+The caller selects relevant definitions before inference. Fetch a category or specific definitions; do not paste all legacy art instructions or all 38 schemas into every prompt. Use the served quickstart for common instructions.
 
 For native function calling, map each descriptor's `name`, `description`, and `input_schema` into the provider's function format. Server validation applies even if the provider ignores constraints. For a model without native function calling, request exactly this JSON shape and have the trusted caller parse it:
 
@@ -65,6 +71,16 @@ This is a REST function-call interface, not an MCP server endpoint or automatic 
 - Returned file text/base64 must be saved or previewed by the caller. Calendar/UUID IDs use cryptographic randomness. Calendar timestamps use whole seconds, explicit offsets, UTC output, escaped text, CRLF, and UTF-8-safe folding.
 - Images are header-inspected without full validation. URLs are parsed without fetching or safety certification. Encodings/hashes are not encryption. Regex uses RE2 and caps output at 50 matches and 128 KiB of captured text.
 - Time-zone conversion embeds Go zone data as a fallback; update the toolchain/database as civil time rules change.
+
+## Interactive exports and integration
+
+The quiz, dashboard, and sorting lab return complete HTML files with their data, styles, and server-owned scripts embedded. They work without network access after saving. The source data is escaped JSON; supplied text is displayed through DOM text nodes. A per-file script hash allows only the embedded script under its content security policy. No models generate executable code for these tools.
+
+The caller must save/share the HTML or display it in an isolated web preview that permits scripts. Use a separate origin with no app credentials, or a sandbox permitting scripts/downloads without same-origin privileges. Browser restrictions may block local storage or file downloads; the quiz handles unavailable storage and still offers progress export. Progress belongs to that file/content version in that browser, not an Edsger account, and is not synced. Quiz answers remain visible in the file; it is practice, not secure assessment. Quiz correctness means matching the supplied answer key, whose facts still require review.
+
+Dashboard summaries use float64 and charts show supplied categories in supplied order, with sparse/shortened axis labels; the table preserves exact serialized input values. All-negative and zero datasets are supported. CSV exports neutralize text starting with spreadsheet formula markers; numeric values remain numbers. Sorting counts comparisons of array values and array-slot writes; insertion frames can temporarily omit a held value, which the action text identifies. The full trace lives inside the HTML; the result also reports sorted values, counters, and frame count.
+
+Pixel-art alpha is preserved in PNG and SVG. Palette indices describe the supplied grid; this is not image generation. Music uses equal-tempered MIDI pitch strings (48–96), mono sine waves at 16 kHz, and per-note fades. Beat endpoints are rounded cumulatively to samples to limit timing drift. Project planning assumes unlimited parallel workers and elapsed integer minutes, with no calendar or resource constraints. Critical tasks have zero slack; multiple critical paths can exist, so the returned IDs are not necessarily a single chain. It is a plan/export, not task execution.
 
 ## Adding tools
 
