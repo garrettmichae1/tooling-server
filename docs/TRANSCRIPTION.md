@@ -1,6 +1,6 @@
 # Figure transcription guide
 
-For the 32 utility tools (math, data, writing, developer, study, planning, visuals, audio), start with `GET /v1/quickstart` and `GET /v1/tools?category=math`. Their JSON schemas, limits, and working examples are served by the catalog. They use `POST /v1/tools/call` and do not need a session or renderer. The rest of this document describes the legacy figure/PDF/STL tools.
+For the 38 utility tools (math, data, writing, developer, study, planning, visuals, audio), start with `GET /v1/quickstart` and `GET /v1/tools?category=math`. Their JSON schemas, limits, and working examples are served by the catalog. They use `POST /v1/tools/call` and do not need a session or renderer. The rest of this document describes the legacy figure/PDF/STL tools.
 
 This service draws a **figure**: a poster, icon, diagram, chart, or labeled vector drawing. It returns a PNG.
 

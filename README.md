@@ -1,6 +1,10 @@
 # Edsger tooling server
 
-A loopback Go service with **32 single-call utility tools**, plus the existing poster, PDF handout, chart, printable-object, and molecule tools. Utilities run in-process using the Go standard library: no paid model APIs, subprocesses, network requests, or persistent user data. They accept structured arguments rather than interpreting English.
+A loopback Go service with **38 single-call utility tools**, plus the existing poster, PDF handout, chart, printable-object, and molecule tools. Utilities run in-process using the Go standard library: no paid model APIs, subprocesses, network requests, or persistent user data. They accept structured arguments rather than interpreting English.
+
+Create useful take-away artifacts: an offline quiz with retry-missed practice, an interactive data dashboard, a sorting lab with playback, transparent pixel-art PNG/SVG sprites, WAV melodies, or a dependency-aware project plan. The three HTML apps embed everything they need and work offline after saving. [Export behavior and app integration](docs/TOOLS.md#interactive-exports-and-integration).
+
+Browser verification is also available: build `bin/tooling-server`, install the pinned Playwright dependency described at the top of `scripts/test-pocket-apps.cjs`, then run `node scripts/test-pocket-apps.cjs`. CI runs these checks in Chromium at phone/desktop sizes. Go is the only production dependency; Playwright is for development tests.
 
 This process is separate from the Edsger iPhone app and from the live model worker. It does not hold Apple receipts or a model key.
 
@@ -8,7 +12,7 @@ The user-facing names are **Make Poster** for a figure, **Make Handout** for a P
 
 ## Run
 
-For all 32 utilities, install Go 1.27 or newer and start without rendering binaries:
+For all 38 utilities, install Go 1.27 or newer and start without rendering binaries:
 
 ```sh
 export FIGURE_TOKEN="$(openssl rand -base64 32)"
@@ -43,7 +47,7 @@ go run ./cmd/figureserver
 
 ## Agent contract
 
-`GET /v1/quickstart` returns short [agent instructions](docs/QUICKSTART.md). `GET /v1/tools` returns names, descriptions, categories, JSON schemas, and runnable examples for all 32 utilities, plus configured legacy renderer availability. Filter with `?category=math`, `data`, `developer`, `writing`, `study`, `planning`, `visuals`, or `audio`. Fetch one definition with `GET /v1/tools/{name}`.
+`GET /v1/quickstart` returns short [agent instructions](docs/QUICKSTART.md). `GET /v1/tools` returns names, descriptions, categories, JSON schemas, and runnable examples for all 38 utilities, plus configured legacy renderer availability. Filter with `?category=math`, `data`, `developer`, `writing`, `study`, `planning`, `visuals`, or `audio`. Fetch one definition with `GET /v1/tools/{name}`.
 
 The trusted caller attaches `Authorization: Bearer $FIGURE_TOKEN` on every endpoint except health. A model emits only the tool name and arguments:
 

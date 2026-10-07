@@ -53,7 +53,7 @@ func TestEveryCatalogExample(t *testing.T) {
 			callOK(t, definition.Name, string(definition.Example))
 		})
 	}
-	if len(seen) != 32 {
+	if len(seen) != 38 {
 		t.Fatalf("unexpected tool count %d", len(seen))
 	}
 	for _, definition := range Catalog("math") {

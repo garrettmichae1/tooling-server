@@ -10,7 +10,7 @@ The main barrier for smaller models was a long prose contract, detailed renderin
 
 | Finding | Change |
 | --- | --- |
-| Rendering was the only capability | 32 utilities across eight categories |
+| Rendering was the only capability | 38 utilities across eight categories |
 | No function catalog | Authenticated schemas/examples, category filtering, per-tool discovery |
 | Many endpoint shapes | Uniform call envelope plus direct per-tool routes |
 | Long art instructions consumed context | Separate short quickstart |
@@ -37,6 +37,10 @@ This is evidence for the stated contracts, not proof for all possible inputs or 
 A free/local model needs an agent loop supplying relevant schemas, validating the proposed call, attaching credentials, invoking the service, and feeding the result back. Hosted use also needs connectivity, per-user gateway authentication/limits, TLS, and policy. Do not embed a shared server token in a distributed phone app.
 
 No Edsger app, model worker, subscription policy, or other repository changed. Utilities are server-ready, not automatically offline on the phone. This service remains loopback-bound and is not a public multi-tenant gateway.
+
+## Offline artifact expansion
+
+Six additional tools create usable offline HTML study/data/sorting apps, real PNG/SVG sprites, WAV note sequences, and exact dependency schedules. Server-owned templates keep model arguments small and avoid generated executable code. Quiz progress is browser-local, not server/account storage. Browser checks exercise mobile/desktop layouts, controls, retry, persistence, export, unavailable storage, injection escaping, and zero network requests. The model caller still needs to save/share/preview returned files.
 
 ## Next priorities
 
