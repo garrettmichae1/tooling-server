@@ -5,3 +5,4 @@ function render(){const visible=selected();$('empty').hidden=visible.length>0;pl
  const head=el('thead'),hr=el('tr');hr.append(el('th','Category'));visible.forEach(s=>hr.append(el('th',s.name)));head.append(hr);const body=el('tbody');DATA.labels.forEach((label,i)=>{const r=el('tr');r.append(el('th',label));visible.forEach(s=>r.append(el('td',String(s.values[i]))));body.append(r)});$('table').append(head,body);
 }
 $('chart-type').onchange=render;$('export').onclick=()=>{const visible=selected();const rows=[[csvCell('Category',true),...visible.map(s=>csvCell(s.name,true))].join(',')];DATA.labels.forEach((label,i)=>rows.push([csvCell(label,true),...visible.map(s=>csvCell(s.values[i],false))].join(',')));download(rows.join('\r\n')+'\r\n','dashboard.csv','text/csv;charset=utf-8')};render();
+window.addEventListener('resize',()=>requestAnimationFrame(render));
