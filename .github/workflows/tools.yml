@@ -1,0 +1,46 @@
+name: Tooling checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Check formatting
+        run: test -z "$(gofmt -l cmd docs internal)"
+      - name: Vet
+        run: go vet ./...
+      - name: Test and detect races
+        run: go test -race ./...
+      - name: Fuzz utility calls
+        env:
+          GOMAXPROCS: '2'
+        run: go test ./internal/tools -run '^$' -fuzz '^FuzzToolCalls$' -fuzztime=5s
+      - name: Fuzz arithmetic
+        env:
+          GOMAXPROCS: '2'
+        run: go test ./internal/tools -run '^$' -fuzz '^FuzzArithmeticExpression$' -fuzztime=5s
+      - name: Fuzz exact linear systems
+        env:
+          GOMAXPROCS: '2'
+        run: go test ./internal/tools -run '^$' -fuzz '^FuzzExactLinearSystem$' -fuzztime=5s
+      - name: Build server
+        run: go build ./cmd/figureserver

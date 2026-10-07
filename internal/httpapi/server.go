@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"time"
 
+	"edsger.local/figureserver/docs"
 	"edsger.local/figureserver/internal/allowlist"
 	"edsger.local/figureserver/internal/auth"
 	"edsger.local/figureserver/internal/chart"
@@ -24,16 +25,18 @@ var sessionID = regexp.MustCompile(`^[0-9a-f]{32}$`)
 
 // Server serves the figure API.
 type Server struct {
-	token    string
-	maxBody  int64
-	sessions *session.Manager
-	handouts *handout.Compiler
-	charts   *chart.Compiler
-	models   *model.Compiler
-	guide    string
-	limit    *ratelimit.Limiter
-	log      *slog.Logger
-	mux      *http.ServeMux
+	token         string
+	maxBody       int64
+	sessions      *session.Manager
+	handouts      *handout.Compiler
+	charts        *chart.Compiler
+	models        *model.Compiler
+	guide         string
+	limit         *ratelimit.Limiter
+	ratePerMinute int
+	renderSlots   chan struct{}
+	log           *slog.Logger
+	mux           *http.ServeMux
 }
 
 // New builds the handler. guide is the transcription document served at GET /v1/guide.
@@ -45,37 +48,65 @@ func New(token string, maxBody int64, ratePerMinute int, sessions *session.Manag
 		maxBody = 256 * 1024
 	}
 	s := &Server{
-		token:    token,
-		maxBody:  maxBody,
-		sessions: sessions,
-		handouts: handouts,
-		charts:   charts,
-		models:   models,
-		guide:    guide,
-		limit:    ratelimit.New(ratePerMinute),
-		log:      log,
+		token:         token,
+		maxBody:       maxBody,
+		sessions:      sessions,
+		handouts:      handouts,
+		charts:        charts,
+		models:        models,
+		guide:         guide,
+		limit:         ratelimit.New(ratePerMinute),
+		ratePerMinute: ratePerMinute,
+		renderSlots:   make(chan struct{}, 2),
+		log:           log,
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", s.health)
 	mux.HandleFunc("GET /v1/guide", s.guideHandler)
+	mux.HandleFunc("GET /v1/quickstart", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/markdown; charset=utf-8")
+		_, _ = io.WriteString(w, docs.Quickstart)
+	})
+	mux.HandleFunc("GET /v1/tools", s.catalog)
+	mux.HandleFunc("GET /v1/tools/{name}", s.toolDefinition)
+	mux.HandleFunc("POST /v1/tools/call", s.toolCall)
+	mux.HandleFunc("POST /v1/tools/{name}", s.directTool)
 	mux.HandleFunc("POST /v1/sessions", s.create)
 	mux.HandleFunc("POST /v1/sessions/{id}/calls", s.call)
 	mux.HandleFunc("POST /v1/sessions/{id}/export", s.export)
 	mux.HandleFunc("DELETE /v1/sessions/{id}", s.delete)
-	mux.HandleFunc("POST /v1/handouts", s.handout)
-	mux.HandleFunc("POST /v1/charts", s.chart)
-	mux.HandleFunc("POST /v1/models", s.model)
-	mux.HandleFunc("POST /v1/molecules", s.molecule)
+	mux.HandleFunc("POST /v1/handouts", s.withRenderSlot(s.handout))
+	mux.HandleFunc("POST /v1/charts", s.withRenderSlot(s.chart))
+	mux.HandleFunc("POST /v1/models", s.withRenderSlot(s.model))
+	mux.HandleFunc("POST /v1/molecules", s.withRenderSlot(s.molecule))
 	s.mux = mux
-	protected := auth.Middleware(token, mux)
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		secureHeaders(w)
-		if !s.limit.Allow(time.Now()) {
+	// Unauthorized traffic and health probes must not exhaust tool capacity.
+	protected := auth.Middleware(token, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/health" && !s.limit.Allow(time.Now()) {
+			w.Header().Set("Retry-After", "60")
 			writeErr(w, http.StatusTooManyRequests, "too many requests")
 			return
 		}
+		mux.ServeHTTP(w, r)
+	}))
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		secureHeaders(w)
 		protected.ServeHTTP(w, r)
 	})
+}
+
+// A process-wide cap also covers the previously uncapped PDF/STL endpoints.
+func (s *Server) withRenderSlot(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case s.renderSlots <- struct{}{}:
+			defer func() { <-s.renderSlots }()
+			next(w, r)
+		default:
+			w.Header().Set("Retry-After", "1")
+			writeErr(w, http.StatusTooManyRequests, "render capacity reached; retry later")
+		}
+	}
 }
 
 func (s *Server) health(w http.ResponseWriter, _ *http.Request) {
@@ -90,6 +121,10 @@ func (s *Server) guideHandler(w http.ResponseWriter, _ *http.Request) {
 }
 
 func (s *Server) create(w http.ResponseWriter, r *http.Request) {
+	if s.sessions == nil {
+		writeErr(w, http.StatusServiceUnavailable, "renderer unavailable")
+		return
+	}
 	if !emptyBody(w, r) {
 		return
 	}
@@ -109,6 +144,10 @@ func (s *Server) create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) call(w http.ResponseWriter, r *http.Request) {
+	if s.sessions == nil {
+		writeErr(w, http.StatusServiceUnavailable, "renderer unavailable")
+		return
+	}
 	id, ok := sessionParam(w, r)
 	if !ok {
 		return
@@ -148,6 +187,10 @@ func (s *Server) call(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) export(w http.ResponseWriter, r *http.Request) {
+	if s.sessions == nil {
+		writeErr(w, http.StatusServiceUnavailable, "renderer unavailable")
+		return
+	}
 	id, ok := sessionParam(w, r)
 	if !ok {
 		return
@@ -334,6 +377,10 @@ func writeHandoutErr(w http.ResponseWriter, err error) {
 }
 
 func (s *Server) delete(w http.ResponseWriter, r *http.Request) {
+	if s.sessions == nil {
+		writeErr(w, http.StatusServiceUnavailable, "renderer unavailable")
+		return
+	}
 	id, ok := sessionParam(w, r)
 	if !ok {
 		return

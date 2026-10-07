@@ -1,6 +1,6 @@
 # Figure art directions
 
-Hand this file to an agent with the bearer token. The agent draws. The server does not read the user's sentence.
+Give these directions to an agent when it needs the legacy renderers. The trusted caller attaches the bearer token outside the model prompt. The agent draws. The server does not read the user's sentence. For utility tools, use the short guide at `GET /v1/quickstart` instead.
 
 This makes a designed figure: a poster, flyer, icon, or chart. It does not make a photograph, a face, or a painted scene. If the user asks for those, say so and offer a poster instead.
 

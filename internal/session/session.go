@@ -15,6 +15,7 @@ import (
 	"sync"
 	"time"
 
+	"edsger.local/figureserver/internal/artifact"
 	"edsger.local/figureserver/internal/compose"
 	"edsger.local/figureserver/internal/mcpclient"
 )
@@ -54,6 +55,7 @@ type Manager struct {
 	mu       sync.Mutex
 	sessions map[string]*Session
 	closed   bool
+	pending  int
 }
 
 // Session is one renderer and its private scratch directory.
@@ -128,14 +130,17 @@ func NewManager(cfg Config) (*Manager, error) {
 // Create starts a renderer. The scratch directory is removed when the session ends.
 func (m *Manager) Create(ctx context.Context) (*Session, error) {
 	m.mu.Lock()
-	if m.closed || len(m.sessions) >= m.maxSessions {
+	if m.closed || len(m.sessions)+m.pending >= m.maxSessions {
+		closed := m.closed
 		m.mu.Unlock()
-		if m.closed {
+		if closed {
 			return nil, ErrUnavailable
 		}
 		return nil, ErrBusy
 	}
+	m.pending++
 	m.mu.Unlock()
+	defer func() { m.mu.Lock(); m.pending--; m.mu.Unlock() }()
 
 	id, err := newID()
 	if err != nil {
@@ -183,9 +188,10 @@ func (m *Manager) Create(ctx context.Context) (*Session, error) {
 	}
 	m.mu.Lock()
 	if m.closed || len(m.sessions) >= m.maxSessions {
+		closed := m.closed
 		m.mu.Unlock()
 		s.destroy()
-		if m.closed {
+		if closed {
 			return nil, ErrUnavailable
 		}
 		return nil, ErrBusy
@@ -265,12 +271,19 @@ func (m *Manager) Export(ctx context.Context, id string) ([]byte, error) {
 	result, _ := s.client.Call(callCtx, "export", args)
 	cancel()
 
-	png, readErr := os.ReadFile(path)
+	png, readErr := artifact.Read(path, s.maxPNG)
+	if errors.Is(readErr, artifact.ErrTooLarge) {
+		s.destroy()
+		return nil, ErrTooLarge
+	}
 	if readErr != nil {
 		png = pngFromResult(result, s.maxPNG)
 	}
 	s.destroy()
-	if !validPNG(png) || len(png) > s.maxPNG {
+	if len(png) > s.maxPNG {
+		return nil, ErrTooLarge
+	}
+	if !validPNG(png) {
 		return nil, ErrPNG
 	}
 	return png, nil
