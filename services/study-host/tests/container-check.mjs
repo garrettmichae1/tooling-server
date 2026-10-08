@@ -22,14 +22,14 @@ try {
   const post=(body,authorized=true,path='/v1/tools/call')=>fetch(origin+path,{method:'POST',headers:{'Content-Type':'application/json',...(authorized?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify(body),signal:AbortSignal.timeout(5000)});
   assert.equal((await post(call(),false)).status,401);
   assert.equal((await post({...call(),tool:'calculate'})).status,400);
-  assert.equal((await post(call(6))).status,400);
+  assert.equal((await post(call(31))).status,400);
   assert.equal((await post(call(),true,'/v1/tools/make_study_app')).status,404);
-  for(const n of [1,3,5]) {
+  for(const n of [1,3,5,30]) {
     const res=await post(call(n));assert.equal(res.status,200);const value=await res.json();
     assert.equal(value.result.filename,'study-app.html');assert.equal(value.result.network_requests,false);assert.equal(value.result.offline,true);assert(value.result.html.includes('Retry missed'));
   }
   assert.equal(docker('inspect',id,'--format','{{.HostConfig.ReadonlyRootfs}}'),'true');
-  console.log('PASS: actual nonroot read-only Go image renders 1/3/5 questions and blocks every other tool');
+  console.log('PASS: actual nonroot read-only Go image renders 1/3/5/30 questions and blocks every other tool');
   execFileSync(process.execPath,['tests/runtime-check.mjs'],{stdio:'inherit',env:{...env,STUDY_TEST_ORIGIN:origin}});
   docker('stop',id);
   console.log('PASS: real container accepts SIGTERM and stops cleanly');

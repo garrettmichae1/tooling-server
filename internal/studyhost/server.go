@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	MaxRequestBytes   = 32_768
+	MaxRequestBytes   = 262_144
 	RequestsPerMinute = 30
 	ToolName          = "make_study_app"
 )
@@ -99,7 +99,7 @@ func New(token string) (http.Handler, error) {
 		var args struct {
 			Questions []json.RawMessage `json:"questions"`
 		}
-		if json.Unmarshal(call.Arguments, &args) != nil || len(args.Questions) < 1 || len(args.Questions) > 5 {
+		if json.Unmarshal(call.Arguments, &args) != nil || len(args.Questions) < 1 || len(args.Questions) > 30 {
 			failure(w, http.StatusBadRequest, "invalid_request")
 			return
 		}

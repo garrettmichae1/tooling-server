@@ -49,7 +49,7 @@ func TestCredentialFailsClosed(t *testing.T) {
 }
 
 func TestActualStudyRenderAndDeterministicReplay(t *testing.T) {
-	for _, count := range []int{1, 3, 5} {
+	for _, count := range []int{1, 3, 5, 30} {
 		h := handler(t)
 		first := request(h, "POST", "/v1/tools/call", fixture(count), testToken)
 		if first.Code != 200 {
@@ -97,7 +97,7 @@ func TestRejectsOtherToolsAndMalformedInput(t *testing.T) {
 		{"POST", "/v1/tools/%63all", fixture(1), testToken, 404},
 		{"POST", "/v1/tools/call", strings.Replace(fixture(1), ToolName, "calculate", 1), testToken, 400},
 		{"POST", "/v1/tools/call", fixture(0), testToken, 400},
-		{"POST", "/v1/tools/call", fixture(6), testToken, 400},
+		{"POST", "/v1/tools/call", fixture(31), testToken, 400},
 		{"POST", "/v1/tools/call", "null", testToken, 400},
 		{"POST", "/v1/tools/call", fixture(1) + " {}", testToken, 400},
 		{"POST", "/v1/tools/call", `{"tool":"calculate","tool":"make_study_app","arguments":{}}`, testToken, 400},
