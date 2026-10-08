@@ -25,6 +25,16 @@ const (
 // New exposes only health and one bounded utility. No renderer, subprocess,
 // catalog, filesystem operation, or other tool is reachable through this host.
 func New(token string) (http.Handler, error) {
+	return newHost(token, ToolName)
+}
+
+// NewWorksheet keeps free rendering isolated from the quiz origin. A process
+// serves exactly one allowlisted tool, even when its shared binary contains more.
+func NewWorksheet(token string) (http.Handler, error) {
+	return newHost(token, "make_worksheet")
+}
+
+func newHost(token, toolName string) (http.Handler, error) {
 	if len(token) < 32 || len(token) > 256 {
 		return nil, errors.New("invalid_origin_credential")
 	}
@@ -41,7 +51,7 @@ func New(token string) (http.Handler, error) {
 			return
 		}
 		if r.URL.Path == "/health" && r.Method == http.MethodGet {
-			respond(w, http.StatusOK, map[string]any{"status": "ok", "service": "edsger-study-container", "tool": ToolName})
+			respond(w, http.StatusOK, map[string]any{"status": "ok", "service": "edsger-study-container", "tool": toolName})
 			return
 		}
 		if r.URL.Path != "/v1/tools/call" {
@@ -92,14 +102,23 @@ func New(token string) (http.Handler, error) {
 		}
 		decoder := json.NewDecoder(bytes.NewReader(normalized))
 		decoder.DisallowUnknownFields()
-		if decoder.Decode(&call) != nil || decoder.Decode(new(any)) != io.EOF || call.Tool != ToolName {
+		if decoder.Decode(&call) != nil || decoder.Decode(new(any)) != io.EOF || call.Tool != toolName {
 			failure(w, http.StatusBadRequest, "invalid_request")
 			return
 		}
 		var args struct {
 			Questions []json.RawMessage `json:"questions"`
+			Exercises []json.RawMessage `json:"exercises"`
 		}
-		if json.Unmarshal(call.Arguments, &args) != nil || len(args.Questions) < 1 || len(args.Questions) > 30 {
+		if json.Unmarshal(call.Arguments, &args) != nil {
+			failure(w, http.StatusBadRequest, "invalid_request")
+			return
+		}
+		count := len(args.Questions)
+		if toolName == "make_worksheet" {
+			count = len(args.Exercises)
+		}
+		if count < 1 || count > 30 {
 			failure(w, http.StatusBadRequest, "invalid_request")
 			return
 		}
@@ -107,13 +126,13 @@ func New(token string) (http.Handler, error) {
 			failure(w, http.StatusRequestTimeout, "request_cancelled")
 			return
 		}
-		result, err := tools.Call(ToolName, call.Arguments)
+		result, err := tools.Call(toolName, call.Arguments)
 		if err != nil {
 			// Never return supplied question text or internal errors from this host.
 			failure(w, http.StatusBadRequest, "invalid_request")
 			return
 		}
-		respond(w, http.StatusOK, map[string]any{"ok": true, "tool": ToolName, "result": result})
+		respond(w, http.StatusOK, map[string]any{"ok": true, "tool": toolName, "result": result})
 	}))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")

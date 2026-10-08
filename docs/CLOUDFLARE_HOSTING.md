@@ -124,3 +124,8 @@ its separate `STUDY_TOOL_TOKEN` secret, and an immutable source revision under
 verification, consent, ledger, idempotency, rate limits and off-by-default app
 switch. Hosting this origin does not authorize a payment-backend deployment,
 production enablement or additional tools.
+
+
+## Second tool: worksheets
+
+The original quiz process remains quiz-only. The additive worksheet implementation has its own admission object, IP limiter, feature gate and container class; see [WORKSHEET_HOSTING.md](WORKSHEET_HOSTING.md) for its free policy, quotas, verification and exact deployment. Enabling it requires explicit approval and must preserve the quiz flag.

@@ -11,6 +11,7 @@ routes = [{ pattern = "tools-sandbox.edsger.app", custom_domain = true }]
 # The iPhone payment gateway and its STUDY_TOOL_ENABLED flag are separate.
 [vars]
 STUDY_HOST_ENABLED = "false"
+WORKSHEET_HOST_ENABLED = "false"
 
 [observability]
 enabled = false
@@ -19,12 +20,39 @@ enabled = false
 name = "STUDY_CONTAINER"
 class_name = "StudyContainer"
 
+[[durable_objects.bindings]]
+name = "WORKSHEET_CONTAINER"
+class_name = "WorksheetContainer"
+
+[[durable_objects.bindings]]
+name = "WORKSHEET_ADMISSION"
+class_name = "WorksheetAdmission"
+
+[[ratelimits]]
+name = "WORKSHEET_IP_LIMIT"
+namespace_id = "1003"
+simple = { limit = 4, period = 60 }
+
 [[migrations]]
 tag = "v1-study-container"
 new_sqlite_classes = ["StudyContainer"]
 
+[[migrations]]
+tag = "v2-worksheet-isolation"
+new_sqlite_classes = ["WorksheetContainer", "WorksheetAdmission"]
+
 [[containers]]
 class_name = "StudyContainer"
+image = "Dockerfile"
+image_build_context = "../.."
+max_instances = 1
+instance_type = "lite"
+
+[containers.observability]
+enabled = false
+
+[[containers]]
+class_name = "WorksheetContainer"
 image = "Dockerfile"
 image_build_context = "../.."
 max_instances = 1

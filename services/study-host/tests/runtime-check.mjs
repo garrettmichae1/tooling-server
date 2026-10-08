@@ -18,13 +18,18 @@ const build=(args,config=resolve('wrangler.toml'))=>execFileSync(process.execPat
 const options=(script,extra={})=>convertV4MiniflareOptions({rootPath:dir,modulesRoot:dir,modules:true,scriptPath:script,compatibilityDate:'2026-10-08',compatibilityFlags:['nodejs_compat'],...extra});
 try {
   const full=join(dir,'full');build(['--outdir',full]);
-  const mf=new Miniflare(options(join(full,'index.js'),{durableObjects:{STUDY_CONTAINER:{className:'StudyContainer',useSQLite:true}},bindings:{FIGURE_TOKEN:token,STUDY_HOST_ENABLED:'true'}}));
+  const mf=new Miniflare(options(join(full,'index.js'),{durableObjects:{STUDY_CONTAINER:{className:'StudyContainer',useSQLite:true},WORKSHEET_CONTAINER:{className:'WorksheetContainer',useSQLite:true},WORKSHEET_ADMISSION:{className:'WorksheetAdmission',useSQLite:true}},ratelimits:{WORKSHEET_IP_LIMIT:{namespace_id:'1003',simple:{limit:4,period:60}}},bindings:{FIGURE_TOKEN:token,STUDY_HOST_ENABLED:'true',WORKSHEET_HOST_ENABLED:'true'}}));
   try {
     const health=await mf.dispatchFetch('https://tools-sandbox.edsger.app/health');assert.equal(health.status,200);assert.equal((await health.json()).service,'edsger-study-tool-edge');
     for(const [path,body,status] of [['/v1/tools/call',JSON.stringify(call()),401],['/v1/sessions','{}',404],['/v1/tools/make_study_app','{}',404]]) {
       const response=await mf.dispatchFetch('https://tools-sandbox.edsger.app'+path,{method:'POST',body});assert.equal(response.status,status);
     }
     const bad=await mf.dispatchFetch('https://tools-sandbox.edsger.app/v1/tools/call',{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:'{"tool":"calculate","arguments":{}}'});assert.equal(bad.status,400);
+    for(let n=0;n<5;n++) {
+      const rate=await mf.dispatchFetch('https://tools-sandbox.edsger.app/v1/worksheets',{method:'POST',headers:{'CF-Connecting-IP':'198.51.100.2','X-Edsger-Worksheet-Consent':'v1','Content-Type':'application/json'},body:'{}'});
+      assert.equal(rate.status,n<4?400:429);
+    }
+    console.log('PASS actual Workers IP rate binding limits anonymous worksheet probes before admission or container work');
     console.log('PASS: full Workers/Containers bundle starts; probes and refused tools never require a container');
   } finally {await mf.dispose();}
 

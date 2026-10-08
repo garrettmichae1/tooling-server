@@ -47,7 +47,7 @@ func utilityRequest(t *testing.T, srv *httptest.Server, method, path, payload, c
 func TestUtilityCatalogAndAllCalls(t *testing.T) {
 	srv := utilityServer(t, 256*1024, 1000)
 	status, _, catalog := utilityRequest(t, srv, "GET", "/v1/tools", "", token)
-	if status != 200 || len(catalog["tools"].([]any)) != 38 {
+	if status != 200 || len(catalog["tools"].([]any)) != 39 {
 		t.Fatal(status, catalog)
 	}
 	renderers := catalog["renderers"].(map[string]any)
@@ -55,7 +55,7 @@ func TestUtilityCatalogAndAllCalls(t *testing.T) {
 		t.Fatal("tools-only advertises renderer")
 	}
 	status, _, category := utilityRequest(t, srv, "GET", "/v1/tools?category=study", "", token)
-	if status != 200 || len(category["tools"].([]any)) != 4 {
+	if status != 200 || len(category["tools"].([]any)) != 5 {
 		t.Fatal(category)
 	}
 	for _, definition := range tools.Catalog("") {
