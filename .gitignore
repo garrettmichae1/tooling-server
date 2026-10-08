@@ -3,3 +3,9 @@ third_party/
 bin/
 *.test
 *.out
+node_modules/
+.wrangler/
+.test-build/
+.dev.vars*
+.env*
+!*.example
