@@ -3,7 +3,10 @@ import { serve, type HostBindings } from "./gateway.js";
 
 interface Env extends HostBindings {
   STUDY_CONTAINER: DurableObjectNamespace<StudyContainer>;
+  WORKSHEET_CONTAINER: DurableObjectNamespace<WorksheetContainer>;
 }
+
+export { WorksheetAdmission } from "./worksheet-admission.js";
 
 export class StudyContainer extends Container<Env> {
   defaultPort = 8080;
@@ -32,6 +35,15 @@ export class StudyContainer extends Container<Env> {
     } catch {
       return new Response('{"error":"study_container_unavailable"}', { status: 503, headers: { "Content-Type": "application/json" } });
     }
+  }
+}
+
+// Independent container and activity timer: free worksheets cannot occupy the
+// quiz process or wake its instance. Both run the same immutable nonroot image.
+export class WorksheetContainer extends StudyContainer {
+  constructor(ctx: DurableObjectState<{}>, env: Env) {
+    super(ctx, env);
+    this.envVars = { FIGURE_TOKEN: env.FIGURE_TOKEN ?? "", WORKSHEET_ONLY: "true" };
   }
 }
 

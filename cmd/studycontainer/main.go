@@ -19,6 +19,9 @@ import (
 
 func main() {
 	handler, err := studyhost.New(os.Getenv("FIGURE_TOKEN"))
+	if os.Getenv("WORKSHEET_ONLY") == "true" {
+		handler, err = studyhost.NewWorksheet(os.Getenv("FIGURE_TOKEN"))
+	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "invalid_origin_credential")
 		os.Exit(1)

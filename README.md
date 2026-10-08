@@ -1,6 +1,6 @@
 # Edsger tooling server
 
-A loopback Go service with **38 single-call utility tools**, plus the existing poster, PDF handout, chart, printable-object, and molecule tools. Utilities run in-process using the Go standard library: no paid model APIs, subprocesses, network requests, or persistent user data. They accept structured arguments rather than interpreting English.
+A loopback Go service with **39 single-call utility tools**, plus the existing poster, PDF handout, chart, printable-object, and molecule tools. Utilities run in-process using the Go standard library: no paid model APIs, subprocesses, network requests, or persistent user data. They accept structured arguments rather than interpreting English.
 
 Create useful take-away artifacts: an offline quiz with retry-missed practice, an interactive data dashboard, a sorting lab with playback, transparent pixel-art PNG/SVG sprites, WAV melodies, or a dependency-aware project plan. The three HTML apps embed everything they need and work offline after saving. [Export behavior and app integration](docs/TOOLS.md#interactive-exports-and-integration).
 
@@ -13,11 +13,13 @@ service at `tools-sandbox.edsger.app`. Its dedicated container entry point leave
 the local server unchanged. See [hosting and verification](docs/CLOUDFLARE_HOSTING.md)
 for boundaries, deployment, recovery and the separate future app rollout.
 
+The second, default-off iPhone tool is **Create Worksheet**, with independent free-rendering limits and a separate container. See [docs/WORKSHEET_HOSTING.md](docs/WORKSHEET_HOSTING.md). It adds no paid-model or payment-backend route.
+
 The user-facing names are **Make Poster** for a figure, **Make Handout** for a PDF page, **Create Chart** for a chart or graph, **Make Object** for a printable solid, and **Make Molecule** for a ball-and-stick model. A figure is a poster, icon, diagram, or chart. It does not generate photographs. A handout is a page a student can keep or print, including typeset math, chemistry formulas, and geometry figures. A chart is a graph with axes, on its own page. An object is an STL from an OpenSCAD script. A molecule is an STL built from a formula such as `H2O`.
 
 ## Run
 
-For all 38 utilities, install Go 1.27 or newer and start without rendering binaries:
+For all 39 utilities, install Go 1.27 or newer and start without rendering binaries:
 
 ```sh
 export FIGURE_TOKEN="$(openssl rand -base64 32)"
@@ -52,7 +54,7 @@ go run ./cmd/figureserver
 
 ## Agent contract
 
-`GET /v1/quickstart` returns short [agent instructions](docs/QUICKSTART.md). `GET /v1/tools` returns names, descriptions, categories, JSON schemas, and runnable examples for all 38 utilities, plus configured legacy renderer availability. Filter with `?category=math`, `data`, `developer`, `writing`, `study`, `planning`, `visuals`, or `audio`. Fetch one definition with `GET /v1/tools/{name}`.
+`GET /v1/quickstart` returns short [agent instructions](docs/QUICKSTART.md). `GET /v1/tools` returns names, descriptions, categories, JSON schemas, and runnable examples for all 39 utilities, plus configured legacy renderer availability. Filter with `?category=math`, `data`, `developer`, `writing`, `study`, `planning`, `visuals`, or `audio`. Fetch one definition with `GET /v1/tools/{name}`.
 
 The trusted caller attaches `Authorization: Bearer $FIGURE_TOKEN` on every endpoint except health. A model emits only the tool name and arguments:
 

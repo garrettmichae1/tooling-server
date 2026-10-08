@@ -3,6 +3,9 @@ package tools
 import "encoding/json"
 
 func init() {
+	registry = append(registry, entry{Definition{"make_worksheet", "Build a printable written-practice worksheet and a separate worked answer key from 1 to 30 supplied exercises. Returns two offline HTML files without scripts or network requests. Text is escaped; content is supplied, not fact-checked. No model, PDF compiler, or arbitrary code is run.", "study", object(map[string]any{
+		"title": str(120), "instructions": str(500), "exercises": array(object(map[string]any{"prompt": str(1000), "answer": str(1000), "explanation": str(2000)}, "prompt", "answer", "explanation"), 1, 30),
+	}, "title", "instructions", "exercises"), json.RawMessage(`{"title":"Algebra practice","instructions":"Show your working.","exercises":[{"prompt":"Solve 2x + 3 = 11.","answer":"x = 4","explanation":"Subtract 3, then divide by 2."}]}`)}, makeWorksheet})
 	registry = append(registry, []entry{
 		{Definition{"make_study_app", "Create a self-contained offline HTML quiz with answer explanations, retry-missed practice, local progress, and progress export. Supply 1 to 100 multiple-choice questions with exactly one zero-based correct_index. Content is supplied, not fact-checked. Return HTML for the caller to save/open in a script-enabled isolated preview; no hosting or account needed.", "study", object(map[string]any{
 			"title": str(120), "questions": array(object(map[string]any{"prompt": str(1000), "choices": array(str(500), 2, 6), "correct_index": integer(0, 5), "explanation": str(2000)}, "prompt", "choices", "correct_index", "explanation"), 1, 100),

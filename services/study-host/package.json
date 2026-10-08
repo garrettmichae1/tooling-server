@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "tsc --outDir .test-build && node tests/gateway.test.mjs",
-    "check:runtime": "node tests/runtime-check.mjs",
-    "check:container": "node tests/container-check.mjs",
+    "test": "tsc --outDir .test-build && node --test tests/gateway.test.mjs tests/worksheet.test.mjs",
+    "check:runtime": "node tests/runtime-check.mjs && node tests/worksheet-runtime.mjs",
+    "check:container": "node tests/container-check.mjs && node tests/worksheet-container.mjs",
     "build:check": "wrangler deploy --dry-run --outdir .wrangler/review",
     "deploy:sandbox": "wrangler deploy --var STUDY_HOST_ENABLED:true"
   },

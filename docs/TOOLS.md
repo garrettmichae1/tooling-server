@@ -1,6 +1,6 @@
 # Tool catalog and model integration
 
-All 38 utilities use the same authenticated API without subscription checks or model-provider credentials. No app or worker code is changed. Existing app/gateway policies still determine whether a particular user or model can reach this service.
+All 39 utilities use the same authenticated API without subscription checks or model-provider credentials. No app or worker code is changed. Existing app/gateway policies still determine whether a particular user or model can reach this service.
 
 ## Tools
 
@@ -39,6 +39,7 @@ All 38 utilities use the same authenticated API without subscription checks or m
 | Developer | `inspect_url` | URL components without fetching |
 | Developer | `generate_uuid` | Random UUIDv4 identifiers |
 | Study | `make_study_app` | Offline interactive quiz, explanations, retry missed, local progress/export |
+| Study | `make_worksheet` | Written exercises, printable question sheet and separate worked answer key; no scripts |
 | Data | `make_data_dashboard` | Offline interactive line/bar chart, toggles, summaries, exact table, CSV |
 | Study | `make_sorting_lab` | Algorithm animation, single steps, server-computed trace/counters |
 | Visuals | `make_pixel_art` | Scaled transparent PNG and SVG sprites from palette indices |
@@ -49,7 +50,7 @@ Live schemas/examples are the source of truth: `GET /v1/tools`, filtered catalog
 
 ## Smaller model integration
 
-The caller selects relevant definitions before inference. Fetch a category or specific definitions; do not paste all legacy art instructions or all 38 schemas into every prompt. Use the served quickstart for common instructions.
+The caller selects relevant definitions before inference. Fetch a category or specific definitions; do not paste all legacy art instructions or all 39 schemas into every prompt. Use the served quickstart for common instructions.
 
 For native function calling, map each descriptor's `name`, `description`, and `input_schema` into the provider's function format. Server validation applies even if the provider ignores constraints. For a model without native function calling, request exactly this JSON shape and have the trusted caller parse it:
 
