@@ -1,0 +1,34 @@
+name = "edsger-study-tool-sandbox"
+main = "src/index.ts"
+account_id = "ae619e34cebbe8df15a39ab013d860a0"
+compatibility_date = "2026-10-08"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+preview_urls = false
+routes = [{ pattern = "tools-sandbox.edsger.app", custom_domain = true }]
+
+# Deployment explicitly enables this isolated origin after validation.
+# The iPhone payment gateway and its STUDY_TOOL_ENABLED flag are separate.
+[vars]
+STUDY_HOST_ENABLED = "false"
+
+[observability]
+enabled = false
+
+[[durable_objects.bindings]]
+name = "STUDY_CONTAINER"
+class_name = "StudyContainer"
+
+[[migrations]]
+tag = "v1-study-container"
+new_sqlite_classes = ["StudyContainer"]
+
+[[containers]]
+class_name = "StudyContainer"
+image = "Dockerfile"
+image_build_context = "../.."
+max_instances = 1
+instance_type = "lite"
+
+[containers.observability]
+enabled = false

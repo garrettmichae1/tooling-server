@@ -8,6 +8,11 @@ Browser verification is also available: build `bin/tooling-server`, install the 
 
 This process is separate from the Edsger iPhone app and from the live model worker. It does not hold Apple receipts or a model key.
 
+The first Cloudflare hosting pilot is an isolated, authenticated **study-quiz-only**
+service at `tools-sandbox.edsger.app`. Its dedicated container entry point leaves
+the local server unchanged. See [hosting and verification](docs/CLOUDFLARE_HOSTING.md)
+for boundaries, deployment, recovery and the separate future app rollout.
+
 The user-facing names are **Make Poster** for a figure, **Make Handout** for a PDF page, **Create Chart** for a chart or graph, **Make Object** for a printable solid, and **Make Molecule** for a ball-and-stick model. A figure is a poster, icon, diagram, or chart. It does not generate photographs. A handout is a page a student can keep or print, including typeset math, chemistry formulas, and geometry figures. A chart is a graph with axes, on its own page. An object is an STL from an OpenSCAD script. A molecule is an STL built from a formula such as `H2O`.
 
 ## Run

@@ -1,0 +1,19 @@
+# A strict build-context allowlist keeps credentials, Git metadata, node_modules,
+# downloaded toolchains, fixtures, and unrelated renderers out of the image.
+**
+!go.mod
+!cmd/
+!cmd/studycontainer/
+!cmd/studycontainer/*.go
+!internal/
+!internal/auth/
+!internal/auth/*.go
+!internal/ratelimit/
+!internal/ratelimit/*.go
+!internal/tools/
+!internal/tools/*.go
+!internal/tools/assets/
+!internal/tools/assets/*
+!internal/studyhost/
+!internal/studyhost/*.go
+**/*_test.go

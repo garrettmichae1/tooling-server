@@ -1,0 +1,4 @@
+export const token = 'study-origin-test-credential-32-bytes';
+export const call = (count = 3) => ({tool:'make_study_app',arguments:{title:'Arithmetic practice',questions:Array.from({length:count},(_,i)=>({prompt:`What is ${i+2} + 3?`,choices:[String(i+4),String(i+5),String(i+6)],correct_index:1,explanation:`Adding ${i+2} and 3 gives ${i+5}.`}))}});
+export const result = {ok:true,tool:'make_study_app',result:{filename:'study-app.html',media_type:'text/html; charset=utf-8',html:'<!doctype html><html>Arithmetic practice</html>',offline:true,network_requests:false,preview_requires_scripts:true,content_verified:false}};
+export const request = (body=JSON.stringify(call()), options={}) => new Request('https://tools-sandbox.edsger.app/v1/tools/call',{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body,...options});
