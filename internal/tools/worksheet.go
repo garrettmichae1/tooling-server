@@ -53,7 +53,13 @@ func makeWorksheet(raw json.RawMessage) (any, error) {
 		b.WriteString(`</main><footer>AI-generated practice. Review important answers against your learning material.</footer></body></html>`)
 		return b.String()
 	}
-	return map[string]any{"filename": "worksheet.html", "media_type": "text/html; charset=utf-8", "html": build(false), "answer_key_html": build(true), "offline": true, "network_requests": false, "preview_requires_scripts": false, "content_verified": false}, nil
+	sheet, key := build(false), build(true)
+	result := map[string]any{"filename": "worksheet.html", "media_type": "text/html; charset=utf-8", "html": sheet, "answer_key_html": key, "offline": true, "network_requests": false, "preview_requires_scripts": false, "content_verified": false}
+	encoded, err := json.Marshal(result)
+	if err != nil || len(sheet) > 524_288 || len(key) > 524_288 || len(encoded) > 1_099_800 {
+		return nil, &Error{Code: "result_too_large", Message: "worksheet exceeds output limits"}
+	}
+	return result, nil
 }
 
 const worksheetHead = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none';"><title>Edsger worksheet</title><style>

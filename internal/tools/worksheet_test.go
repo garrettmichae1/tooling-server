@@ -66,3 +66,17 @@ func TestWorksheetContractBounds(t *testing.T) {
 		}
 	}
 }
+
+func TestWorksheetEscapedOutputIsBounded(t *testing.T) {
+	exercises := make([]map[string]string, 30)
+	for i := range exercises {
+		exercises[i] = map[string]string{"prompt": strings.Repeat("\"", 1000), "answer": strings.Repeat("\"", 1000), "explanation": strings.Repeat("\"", 2000)}
+	}
+	raw, _ := json.Marshal(map[string]any{"title": "Arithmetic", "instructions": "Show work.", "exercises": exercises})
+	if len(raw) > 256*1024 {
+		t.Fatal("fixture exceeds input cap")
+	}
+	if _, err := Call("make_worksheet", raw); err == nil {
+		t.Fatal("escaped output exceeded cap")
+	}
+}
