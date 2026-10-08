@@ -46,14 +46,14 @@ export default {fetch:serve};`);
     return new Response(JSON.stringify(result),{headers:{'Content-Type':'application/json'}});
   }}));
   try {
-    for(const count of [1,3,5]) {
+    for(const count of [1,3,5,30]) {
       const args={method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json','X-Apple-Transaction-JWS':'synthetic-not-a-receipt'},body:JSON.stringify(call(count))};
       const response=await pipeline.dispatchFetch('https://tools-sandbox.edsger.app/v1/tools/call',args);assert.equal(response.status,200);
       const actual=await response.json();assert.equal(actual.tool,'make_study_app');assert.equal(actual.result.network_requests,false);assert.equal(actual.result.content_verified,false);assert.equal(actual.result.offline,true);assert(actual.result.html.startsWith('<!doctype html>'));
       if(origin) {assert(actual.result.html.includes('Retry missed'));assert(actual.result.html.includes('Arithmetic practice'));}
       const replay=await pipeline.dispatchFetch('https://tools-sandbox.edsger.app/v1/tools/call',args);assert.equal(replay.status,200);assert.deepEqual(await replay.json(),actual);
     }
-    assert.equal(executions,6);
-    console.log(`PASS: real Workers SQLite transport handles 1/3/5-question quizzes and identical replays${origin?' through the real Go Docker image':''}`);
+    assert.equal(executions,8);
+    console.log(`PASS: real Workers SQLite transport handles 1/3/5/30-question quizzes and identical replays${origin?' through the real Go Docker image':''}`);
   } finally {await pipeline.dispose();}
 } finally {await rm(dir,{recursive:true,force:true});}

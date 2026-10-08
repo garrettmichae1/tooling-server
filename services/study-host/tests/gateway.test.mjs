@@ -21,24 +21,24 @@ test('health, disabled origin, missing token and unauthorized traffic never star
   }
 });
 
-test('one, three and five questions use one fixed object and send only the origin credential',async()=>{
+test('one through thirty questions use one fixed object and send only the origin credential',async()=>{
   const env=bindings(async req=>{
     assert.equal(req.url,'http://container/v1/tools/call');assert.equal(req.method,'POST');
     assert.deepEqual([...req.headers.keys()].sort(),['authorization','content-type']);
     assert.equal(req.headers.get('Authorization'),`Bearer ${token}`);
-    const payload=await req.json();assert.equal(payload.tool,'make_study_app');assert([1,3,5].includes(payload.arguments.questions.length));
+    const payload=await req.json();assert.equal(payload.tool,'make_study_app');assert([1,3,5,30].includes(payload.arguments.questions.length));
     return new Response(JSON.stringify(result),{headers:{'Content-Type':'application/json'}});
   });
-  for(const n of [1,3,5]) {
+  for(const n of [1,3,5,30]) {
     const response=await serve(request(JSON.stringify(call(n)),{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json','X-Apple-Transaction-JWS':'synthetic-not-a-receipt','X-User-Selected-Origin':'https://attacker.invalid'}}),env);
     assert.equal(response.status,200);assert.deepEqual(await response.json(),result);
   }
-  assert.deepEqual(env.observed,[CONTAINER_NAME,CONTAINER_NAME,CONTAINER_NAME]);
+  assert.deepEqual(env.observed,[CONTAINER_NAME,CONTAINER_NAME,CONTAINER_NAME,CONTAINER_NAME]);
 });
 
 test('all other tools, routes and ambiguous or oversized payloads are refused before object lookup',async()=>{
   const malformed=[
-    JSON.stringify({...call(),tool:'calculate'}), JSON.stringify(call(0)),JSON.stringify(call(6)),
+    JSON.stringify({...call(),tool:'calculate'}), JSON.stringify(call(0)),JSON.stringify(call(31)),
     JSON.stringify({...call(),url:'https://attacker.invalid'}),
     '{"tool":"calculate","tool":"make_study_app","arguments":{}}',
     '{"tool":"make_study_app","\\u0074ool":"make_study_app","arguments":{}}',
@@ -56,10 +56,10 @@ test('all other tools, routes and ambiguous or oversized payloads are refused be
   for(const path of ['/v1/tools','/v1/tools/make_study_app','/v1/sessions','/v1/tools/%63all']) {
     const env=bindings(),res=await serve(new Request('https://tools-sandbox.edsger.app'+path),env);assert.equal(res.status,404);assert.equal(env.observed.length,0);
   }
-  for(const req of [request(' '.repeat(32769)),request('{}',{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json','Content-Length':'32769'}})]) {
+  for(const req of [request(' '.repeat(262145)),request('{}',{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json','Content-Length':'262145'}})]) {
     const env=bindings(),res=await serve(req,env);assert.equal(res.status,413);assert.equal(env.observed.length,0);
   }
-  const env=bindings(),res=await serve(request(new ReadableStream({start(controller){controller.enqueue(new Uint8Array(32769));controller.close();}}),{duplex:'half'}),env);
+  const env=bindings(),res=await serve(request(new ReadableStream({start(controller){controller.enqueue(new Uint8Array(262145));controller.close();}}),{duplex:'half'}),env);
   assert.equal(res.status,413);assert.equal(env.observed.length,0);
 });
 

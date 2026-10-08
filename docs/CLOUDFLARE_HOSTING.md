@@ -40,7 +40,7 @@ TLS 1.2 or 1.3. It exposes:
 The edge verifies the credential before reading input or looking up a container.
 There is no public catalog, direct-tool route, legacy renderer, upgrade, query
 credential, or user-selected upstream. The edge shares the app gateway's strict
-first-tool contract: 32,768 UTF-8 bytes, one to five questions, bounded strings,
+first-tool contract: 262,144 UTF-8 bytes, one to thirty questions, bounded strings,
 distinct choices, correct indices, and no unknown fields, duplicate JSON keys,
 NUL, invalid UTF-8, unpaired surrogates or trailing JSON. It forwards only the
 canonical tool payload and origin credential; Apple receipts and client headers
@@ -81,7 +81,7 @@ npm run check:container
 
 The last command launches an isolated nonroot/read-only Docker container, tests
 its actual artifact and rejection paths, bundles the complete Workers SDK, and
-passes one/three/five-question quizzes plus deterministic replays from workerd
+passes one/three/five/thirty-question quizzes plus deterministic replays from workerd
 through a real SQLite Durable Object transport to the real Go image. It sends
 only synthetic quiz fixtures and cleans up its own container. It requires a local
 Linux Docker daemon at `/var/run/docker.sock`; no Cloudflare login is needed for
@@ -104,7 +104,7 @@ tests. GitHub Actions runs these checks without deployment credentials.
    This command changes only `edsger-study-tool-sandbox` and the new custom domain;
    it does not deploy either `lilc-agent` Worker.
 6. Verify public edge health, rejection of missing/wrong credentials and other
-   tools, then privately POST fixed one/three/five-question fixtures and replay
+   tools, then privately POST fixed one/three/five/thirty-question fixtures and replay
    them identically. A valid authenticated render proves Go/container readiness.
 7. Compare both existing iPhone API deployment versions and health responses
    against the baseline, and record the new Worker version/container image in

@@ -1,6 +1,6 @@
 // The first-tool contract matches the app gateway's independently tested
 // study-tool.ts. This host imports no payment, receipt, or model code.
-export const STUDY_REQUEST_BYTES = 32_768;
+export const STUDY_REQUEST_BYTES = 262_144;
 export const STUDY_RESPONSE_BYTES = 1_100_000;
 const encoder = new TextEncoder();
 interface Question { prompt: string; choices: string[]; correct_index: number; explanation: string }
@@ -94,7 +94,7 @@ export function studyCall(raw: unknown): StudyCall {
   if (root.tool !== "make_study_app") throw Error("invalid_request");
   const args = object(root.arguments, ["title", "questions"]);
   const title = string(args.title, 120);
-  if (!Array.isArray(args.questions) || args.questions.length < 1 || args.questions.length > 5) throw Error("invalid_request");
+  if (!Array.isArray(args.questions) || args.questions.length < 1 || args.questions.length > 30) throw Error("invalid_request");
   const questions = args.questions.map(raw => {
     const q = object(raw, ["prompt", "choices", "correct_index", "explanation"]);
     const prompt = string(q.prompt, 1000), explanation = string(q.explanation, 2000, false);
