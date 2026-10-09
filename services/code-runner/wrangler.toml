@@ -1,0 +1,165 @@
+name = "edsger-code-runner"
+main = "src/index.ts"
+compatibility_date = "2026-10-08"
+workers_dev = false
+preview_urls = false
+
+# Private service binding only. Global admission limits TOTAL concurrency to 8,
+# independently of the per-profile provisioning ceilings below.
+[vars]
+CODE_RUNNER_ENABLED = "false"
+[observability]
+enabled = false
+[[durable_objects.bindings]]
+name = "CODE_CORE_JOB"
+class_name = "CodeCoreJob"
+
+[[durable_objects.bindings]]
+name = "CODE_SYSTEMS_JOB"
+class_name = "CodeSystemsJob"
+
+[[durable_objects.bindings]]
+name = "CODE_JVM_JOB"
+class_name = "CodeJVMJob"
+
+[[durable_objects.bindings]]
+name = "CODE_DOTNET_JOB"
+class_name = "CodeDotnetJob"
+
+[[durable_objects.bindings]]
+name = "CODE_SWIFT_JOB"
+class_name = "CodeSwiftJob"
+
+[[durable_objects.bindings]]
+name = "CODE_ADMISSION"
+class_name = "CodeAdmission"
+
+[[migrations]]
+tag = "v1-code-runner"
+new_sqlite_classes = ["CodeCoreJob", "CodeSystemsJob", "CodeJVMJob", "CodeDotnetJob", "CodeSwiftJob", "CodeAdmission"]
+
+[[containers]]
+class_name = "CodeCoreJob"
+image = "Dockerfile"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[containers.observability]
+enabled = false
+
+[[containers]]
+class_name = "CodeSystemsJob"
+image = "Dockerfile.systems"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[containers.observability]
+enabled = false
+
+[[containers]]
+class_name = "CodeJVMJob"
+image = "Dockerfile.jvm"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[containers.observability]
+enabled = false
+
+[[containers]]
+class_name = "CodeDotnetJob"
+image = "Dockerfile.dotnet"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[containers.observability]
+enabled = false
+
+[[containers]]
+class_name = "CodeSwiftJob"
+image = "Dockerfile.swift"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[containers.observability]
+enabled = false
+
+[env.sandbox]
+name = "edsger-code-runner-sandbox"
+workers_dev = false
+preview_urls = false
+[env.sandbox.vars]
+CODE_RUNNER_ENABLED = "false"
+[env.sandbox.observability]
+enabled = false
+[[env.sandbox.durable_objects.bindings]]
+name = "CODE_CORE_JOB"
+class_name = "CodeCoreJob"
+
+[[env.sandbox.durable_objects.bindings]]
+name = "CODE_SYSTEMS_JOB"
+class_name = "CodeSystemsJob"
+
+[[env.sandbox.durable_objects.bindings]]
+name = "CODE_JVM_JOB"
+class_name = "CodeJVMJob"
+
+[[env.sandbox.durable_objects.bindings]]
+name = "CODE_DOTNET_JOB"
+class_name = "CodeDotnetJob"
+
+[[env.sandbox.durable_objects.bindings]]
+name = "CODE_SWIFT_JOB"
+class_name = "CodeSwiftJob"
+
+[[env.sandbox.durable_objects.bindings]]
+name = "CODE_ADMISSION"
+class_name = "CodeAdmission"
+
+[[env.sandbox.migrations]]
+tag = "v1-code-runner"
+new_sqlite_classes = ["CodeCoreJob", "CodeSystemsJob", "CodeJVMJob", "CodeDotnetJob", "CodeSwiftJob", "CodeAdmission"]
+
+[[env.sandbox.containers]]
+class_name = "CodeCoreJob"
+image = "Dockerfile"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[env.sandbox.containers.observability]
+enabled = false
+
+[[env.sandbox.containers]]
+class_name = "CodeSystemsJob"
+image = "Dockerfile.systems"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[env.sandbox.containers.observability]
+enabled = false
+
+[[env.sandbox.containers]]
+class_name = "CodeJVMJob"
+image = "Dockerfile.jvm"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[env.sandbox.containers.observability]
+enabled = false
+
+[[env.sandbox.containers]]
+class_name = "CodeDotnetJob"
+image = "Dockerfile.dotnet"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[env.sandbox.containers.observability]
+enabled = false
+
+[[env.sandbox.containers]]
+class_name = "CodeSwiftJob"
+image = "Dockerfile.swift"
+image_build_context = "."
+max_instances = 8
+instance_type = "standard-2"
+[env.sandbox.containers.observability]
+enabled = false

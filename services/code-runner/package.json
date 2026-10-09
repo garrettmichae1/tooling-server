@@ -1,0 +1,11 @@
+{
+  "name": "@edsger/code-runner", "version": "0.1.0", "private": true, "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsc --outDir .test-build && node --test tests/*.test.mjs",
+    "test:runner": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "build:check": "wrangler deploy --dry-run --containers-rollout=none --outdir .wrangler/review",
+    "test:image": "python3 tests/image_smoke.py"
+  },
+  "devDependencies": { "@cloudflare/workers-types": "5.20261003.1", "typescript": "5.9.3", "wrangler": "4.147.0" }
+}

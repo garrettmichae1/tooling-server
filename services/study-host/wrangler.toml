@@ -51,6 +51,54 @@ instance_type = "lite"
 [containers.observability]
 enabled = false
 
+# Production uses a separate credential, admission budget and container objects.
+# The default environment above remains the existing sandbox deployment.
+[env.production]
+name = "edsger-study-tool"
+workers_dev = false
+preview_urls = false
+routes = [{ pattern = "tools.edsger.app", custom_domain = true }]
+[env.production.vars]
+STUDY_HOST_ENABLED = "false"
+WORKSHEET_HOST_ENABLED = "false"
+[env.production.observability]
+enabled = false
+[[env.production.durable_objects.bindings]]
+name = "STUDY_CONTAINER"
+class_name = "StudyContainer"
+[[env.production.durable_objects.bindings]]
+name = "WORKSHEET_CONTAINER"
+class_name = "WorksheetContainer"
+[[env.production.durable_objects.bindings]]
+name = "WORKSHEET_ADMISSION"
+class_name = "WorksheetAdmission"
+[[env.production.ratelimits]]
+name = "WORKSHEET_IP_LIMIT"
+namespace_id = "1004"
+simple = { limit = 4, period = 60 }
+[[env.production.migrations]]
+tag = "v1-study-container"
+new_sqlite_classes = ["StudyContainer"]
+[[env.production.migrations]]
+tag = "v2-worksheet-isolation"
+new_sqlite_classes = ["WorksheetContainer", "WorksheetAdmission"]
+[[env.production.containers]]
+class_name = "StudyContainer"
+image = "Dockerfile"
+image_build_context = "../.."
+max_instances = 1
+instance_type = "lite"
+[env.production.containers.observability]
+enabled = false
+[[env.production.containers]]
+class_name = "WorksheetContainer"
+image = "Dockerfile"
+image_build_context = "../.."
+max_instances = 1
+instance_type = "lite"
+[env.production.containers.observability]
+enabled = false
+
 [[containers]]
 class_name = "WorksheetContainer"
 image = "Dockerfile"

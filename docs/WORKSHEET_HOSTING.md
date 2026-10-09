@@ -1,4 +1,13 @@
-# Create Worksheet sandbox
+# Create Worksheet hosting
+
+The production configuration is `wrangler.toml` environment `production`, Worker
+`edsger-study-tool`, at `tools.edsger.app`. It has independent Durable Objects,
+worksheet rate-limit namespace, containers and `FIGURE_TOKEN`. The default
+environment remains the existing `edsger-study-tool-sandbox` host. Debug app
+worksheets use sandbox; Release worksheets use production. Deployments were
+authorized for the October 9 hardware-test release; account credentials and
+live verification are still required. See the paired app's
+[release procedure](https://github.com/garrettmichae1/friendly-potato/blob/main/Docs/HARDWARE_TEST_RELEASE.md).
 
 The second iPhone tool is `make_worksheet`: written exercises, model answers,
 worked reasoning, a printable question sheet, and a separate answer key. The
