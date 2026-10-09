@@ -9,7 +9,8 @@
     "check:runtime": "node tests/runtime-check.mjs && node tests/worksheet-runtime.mjs",
     "check:container": "node tests/container-check.mjs && node tests/worksheet-container.mjs",
     "build:check": "wrangler deploy --dry-run --outdir .wrangler/review",
-    "deploy:sandbox": "wrangler deploy --var STUDY_HOST_ENABLED:true"
+    "deploy:sandbox": "wrangler deploy --env=\"\" --var STUDY_HOST_ENABLED:true --var WORKSHEET_HOST_ENABLED:true",
+    "deploy:production": "wrangler deploy --env production --var STUDY_HOST_ENABLED:true --var WORKSHEET_HOST_ENABLED:true"
   },
   "dependencies": {
     "@cloudflare/containers": "0.3.7"

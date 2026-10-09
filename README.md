@@ -13,7 +13,11 @@ service at `tools-sandbox.edsger.app`. Its dedicated container entry point leave
 the local server unchanged. See [hosting and verification](docs/CLOUDFLARE_HOSTING.md)
 for boundaries, deployment, recovery and the separate future app rollout.
 
-The second, default-off iPhone tool is **Create Worksheet**, with independent free-rendering limits and a separate container. See [docs/WORKSHEET_HOSTING.md](docs/WORKSHEET_HOSTING.md). It adds no paid-model or payment-backend route.
+The second iPhone tool is **Create Worksheet**, with independent free-rendering limits and a separate container. Sandbox and production have separate configurations and credentials; see [docs/WORKSHEET_HOSTING.md](docs/WORKSHEET_HOSTING.md). It adds no paid-model or payment-backend route.
+
+The IDE uses the separate private [code runner](services/code-runner/README.md),
+supporting 19 languages and curated libraries. That service must run in the
+purchase gateway's Cloudflare account, independently of this site's domain.
 
 The user-facing names are **Make Poster** for a figure, **Make Handout** for a PDF page, **Create Chart** for a chart or graph, **Make Object** for a printable solid, and **Make Molecule** for a ball-and-stick model. A figure is a poster, icon, diagram, or chart. It does not generate photographs. A handout is a page a student can keep or print, including typeset math, chemistry formulas, and geometry figures. A chart is a graph with axes, on its own page. An object is an STL from an OpenSCAD script. A molecule is an STL built from a formula such as `H2O`.
 
