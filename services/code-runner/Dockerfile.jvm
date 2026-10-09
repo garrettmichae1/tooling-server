@@ -1,0 +1,12 @@
+# syntax=docker/dockerfile:1
+FROM ubuntu:24.04@sha256:f610ab94648195aa356059f5b41d6085c9d4d903c072430cdd1af7bdb646106b
+RUN apt-get update && apt-get install -y --no-install-recommends python3 openjdk-21-jdk-headless curl unzip ca-certificates && rm -rf /var/lib/apt/lists/*
+# JetBrains release digest; no unauthenticated package installation at run time.
+RUN --mount=type=secret,id=system_ca if [ -f /run/secrets/system_ca ]; then export CURL_CA_BUNDLE=/run/secrets/system_ca; fi; curl --fail --location --retry 2 https://github.com/JetBrains/kotlin/releases/download/v2.2.21/kotlin-compiler-2.2.21.zip -o /tmp/kotlin.zip && echo 'a623871f1cd9c938946948b70ef9170879f0758043885bbd30c32f024e511714  /tmp/kotlin.zip' | sha256sum --check && unzip -q /tmp/kotlin.zip -d /opt && ln -s /opt/kotlinc/bin/kotlinc /usr/local/bin/kotlinc && rm /tmp/kotlin.zip
+
+# Controller has no secrets. Submitted programs are demoted to UID/GID 65532.
+RUN find / -xdev -type f -perm /6000 -exec chmod a-s {} + && mkdir -p /opt/edsger
+COPY runtime/runner.py /opt/edsger/runner.py
+EXPOSE 8080
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/usr/bin/python3", "-u", "/opt/edsger/runner.py"]

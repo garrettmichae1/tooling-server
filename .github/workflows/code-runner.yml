@@ -1,0 +1,56 @@
+name: Isolated code runner checks
+on:
+  pull_request:
+    paths: ['services/code-runner/**', '.github/workflows/code-runner.yml']
+  push:
+    branches: [main, feat/remote-code-runner]
+    paths: ['services/code-runner/**', '.github/workflows/code-runner.yml']
+permissions:
+  contents: read
+concurrency:
+  group: code-runner-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  contracts-and-worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: services/code-runner
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: services/code-runner/package-lock.json
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run typecheck && npm test && npm run test:runner && npm run build:check
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+  real-runtime-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {profile: core, dockerfile: Dockerfile}
+          - {profile: systems, dockerfile: Dockerfile.systems}
+          - {profile: jvm, dockerfile: Dockerfile.jvm}
+          - {profile: dotnet, dockerfile: Dockerfile.dotnet}
+          - {profile: swift, dockerfile: Dockerfile.swift}
+    defaults:
+      run:
+        working-directory: services/code-runner
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Build the pinned compiler image
+        run: docker build --platform linux/amd64 --provenance=false -f '${{ matrix.dockerfile }}' -t 'edsger-code-${{ matrix.profile }}:review' .
+      - name: Execute real programs without network access
+        run: python3 tests/image_smoke.py --profile '${{ matrix.profile }}'
+# No Cloudflare credentials, public endpoint, registry push or deployment step.
