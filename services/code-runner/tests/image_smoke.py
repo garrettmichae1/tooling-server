@@ -68,8 +68,11 @@ def main():
         completed(run(image, "html", "index.html", "", files=[dict(path="index.html",content='<link rel="stylesheet" href="style.css"><h1>inline</h1><script src="app.js"></script>'),dict(path="style.css",content="h1{color:red}"),dict(path="app.js",content='console.log("local script")')], mode="preview"), "local script")
         print("PASS stdin, UID, environment, failure, output cap, React, Vue, local HTML assets", flush=True)
     if args.profile == "systems":
+        completed(run(image,"go","main.go",'package main\nimport ("crypto/sha256"; "encoding/json"; "fmt"; "net/http")\nfunc main(){b,_:=json.Marshal(http.StatusOK);fmt.Printf("stdlib %s %x\\n",b,sha256.Sum256(b))}'),"stdlib 200")
+        completed(run(image,"go","main.go",'package main\nimport ("fmt"; "os")\nfunc main(){if err:=os.WriteFile("/opt/go-cache/edsger-smoke-marker",[]byte("fixed fixture"),0600);err!=nil{panic(err)};fmt.Println("marker written")}'),"marker written")
+        completed(run(image,"go","main.go",'package main\nimport ("fmt"; "os")\nfunc main(){_,err:=os.Stat("/opt/go-cache/edsger-smoke-marker");fmt.Println("fresh cache",os.IsNotExist(err))}'),"fresh cache true")
         completed(run(image,"rust","src/main.rs","",files=[dict(path="Cargo.toml",content='[package]\nname="sample"\nversion="0.1.0"\nedition="2024"\n'),dict(path="src/main.rs",content='fn main(){println!("cargo works");}')]),"cargo works")
         completed(run(image,"c","main.c","",files=[dict(path="main.c",content='#include <stdio.h>\nint sum(void);int main(){printf("multi %d",sum());}'),dict(path="sum.c",content='int sum(void){return 6;}')]),"multi 6")
-        print("PASS Cargo project and multiple C files",flush=True)
+        print("PASS Go standard libraries and fresh cache, Cargo project and multiple C files",flush=True)
 
 if __name__ == "__main__": main()

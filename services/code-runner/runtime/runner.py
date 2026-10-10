@@ -175,7 +175,7 @@ def plans(value, root):
         if "go.mod" not in files:
             (root / "go.mod").write_text("module edsger.execution\n\ngo 1.27\n")
         package = "./" + str(Path(entry).parent)
-        return [["go", "build", "-o", binary, package], ["./" + binary]]
+        return [["go", "build", "-p", "1", "-o", binary, package], ["./" + binary]]
     if language == "rust":
         if "Cargo.toml" in files:
             return [["cargo", "build", "--offline", "--target-dir", ".build/target"], ["cargo", "run", "--offline", "--target-dir", ".build/target", "--quiet"]]
@@ -238,6 +238,12 @@ def execute(raw, deadline_seconds=DEADLINE_SECONDS):
                 os.chmod(path, 0o600)
                 if os.getuid() == 0: os.chown(path, 65532, 65532)
         env = environment(root)
+        if value["language"] == "go" and Path("/opt/go-cache").is_dir():
+            # The image starts from the same standard-library seed each time.
+            # Job artifacts remain on this job's private microVM disk until
+            # unconditional destruction. No cache is shared with another job.
+            env["GOCACHE"] = "/opt/go-cache"
+            env["GOMAXPROCS"] = "1"
         node_modules = Path("/opt/node-libraries/node_modules")
         if node_modules.exists(): (root / "node_modules").symlink_to(node_modules)
         if value["language"] == "html":
