@@ -1,5 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 import { executionInput, executionResult, json, readJSON, LIFETIME_MS, REVISION, UUID, MAX_REQUEST_BYTES, LANGUAGES, type Language } from "./contract";
+import { forwardJob } from "./runtime-errors";
 export { CodeAdmission } from "./admission";
 interface Env { CODE_RUNNER_ENABLED?: string; CODE_CORE_JOB: DurableObjectNamespace; CODE_SYSTEMS_JOB: DurableObjectNamespace; CODE_JVM_JOB: DurableObjectNamespace; CODE_DOTNET_JOB: DurableObjectNamespace; CODE_SWIFT_JOB: DurableObjectNamespace; CODE_ADMISSION: DurableObjectNamespace }
 const PROFILE: Record<Language, keyof Pick<Env, "CODE_CORE_JOB" | "CODE_SYSTEMS_JOB" | "CODE_JVM_JOB" | "CODE_DOTNET_JOB" | "CODE_SWIFT_JOB">> = {
@@ -17,7 +18,7 @@ export async function serve(request: Request, env: Env): Promise<Response> {
     const language = request.headers.get("X-Edsger-Execution-Language") as Language;
     if (!LANGUAGES.includes(language) || !env[PROFILE[language]]) return json({error: "invalid_request"}, 400);
     const namespace = env[PROFILE[language]];
-    return namespace.get(namespace.idFromName(id)).fetch(new Request("https://job/cancel", {method: "DELETE"}));
+    return forwardJob(namespace.get(namespace.idFromName(id)), new Request("https://job/cancel", {method: "DELETE"}));
   }
   let input;
   try { input = executionInput(await readJSON(request)); }
@@ -28,7 +29,7 @@ export async function serve(request: Request, env: Env): Promise<Response> {
   const admission = env.CODE_ADMISSION.get(env.CODE_ADMISSION.idFromName("global-v1"));
   const admitted = await admission.fetch(new Request(`https://admission/${id}`, {method: "POST"}));
   if (!admitted.ok) return admitted;
-  try { return await job.fetch(new Request("https://job/run", {method: "POST", body: JSON.stringify(input), signal: request.signal})); }
+  try { return await forwardJob(job, new Request("https://job/run", {method: "POST", body: JSON.stringify(input), signal: request.signal})); }
   finally { await admission.fetch(new Request(`https://admission/${id}`, {method: "DELETE"})); }
 }
 export default {fetch: serve};

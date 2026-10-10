@@ -34,6 +34,11 @@ the compile/run deadline. Each job starts from that image seed on its own fresh
 microVM disk. Writable compiler cache and program artifacts are destroyed with
 the instance; no cache volume is shared between jobs.
 
+If Cloudflare cannot allocate a container-backed actor, the private edge returns
+a fixed `capacity_limited` 429 so the purchase gateway releases the unused hold
+and run count. Unknown upstream failures return a fixed 503 and retain the
+existing uncertain-outcome accounting. Raw platform errors are never forwarded.
+
 ## Boundary and limits
 
 `src/contract.ts` defines `edsger-execution-v1`; the verified backend mirrors the

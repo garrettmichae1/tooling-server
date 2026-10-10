@@ -52,6 +52,25 @@ test('persisted global admission caps concurrency and attempts across actor rest
     await storage.put('counters',{...(await storage.get('counters')),[limit]:0});
   }
 });
+test('platform capacity refusal is refundable and releases global admission without raw error output',async()=>{
+  const message='There is no container instance that can be provided to this Durable Object, try again later';
+  for(const upstream of [async()=>{throw new Error(message)},async()=>new Response(message,{status:503})]){
+    const events=[];
+    const namespace=fetch=>({idFromName:id=>id,get:()=>({fetch})});
+    const env={CODE_RUNNER_ENABLED:'true',CODE_CORE_JOB:namespace(upstream),CODE_ADMISSION:namespace(async req=>{events.push(req.method);return new Response('{}')})};
+    const response=await serve(new Request('https://runner/'+uuid(101),{method:'POST',headers,body:JSON.stringify(input)}),env);
+    assert.equal(response.status,429);assert.deepEqual(await response.json(),{error:'capacity_limited'});
+    assert.deepEqual(events,['POST','DELETE']);
+  }
+});
+test('unknown platform failures stay uncertain and cannot expose arbitrary errors',async()=>{
+  for(const upstream of [async()=>{throw new Error('arbitrary internal error')},async()=>new Response('arbitrary internal error',{status:500}),async()=>new Response('x'.repeat(2048),{status:503})]){
+    const namespace=fetch=>({idFromName:id=>id,get:()=>({fetch})});
+    const env={CODE_RUNNER_ENABLED:'true',CODE_CORE_JOB:namespace(upstream),CODE_ADMISSION:namespace(async()=>new Response('{}'))};
+    const response=await serve(new Request('https://runner/'+uuid(102),{method:'POST',headers,body:JSON.stringify(input)}),env);
+    assert.equal(response.status,503);assert.deepEqual(await response.json(),{error:'runner_unavailable'});
+  }
+});
 function jobFixture(Class=CodeCoreJob){
   const storage=new Storage(),events=[];
   const container={start:options=>events.push(['start',options]),setInactivityTimeout:async n=>events.push(['ttl',n]),destroy:async()=>events.push(['destroy']),getTcpPort:()=>({fetch:async req=>req.method==='GET'?new Response('{}'):new Response(JSON.stringify({language:'python',status:'completed',stdout:'hello',stderr:'',exitCode:0,truncated:false}),{headers:{'Content-Type':'application/json'}})})};
