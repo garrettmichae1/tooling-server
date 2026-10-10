@@ -4,7 +4,9 @@ const NO_CONTAINER = "There is no container instance that can be provided to thi
 
 function failure(message: string): Response {
   const capacity = message.includes(NO_CONTAINER);
-  return json({error: capacity ? "capacity_limited" : "runner_unavailable"}, capacity ? 429 : 503);
+  // The gateway treats 503 as a definite pre-launch rejection. Unknown failures
+  // must use 502 so it preserves the uncertain hold rather than granting credit.
+  return json({error: capacity ? "capacity_limited" : "runner_unavailable"}, capacity ? 429 : 502);
 }
 
 async function boundedError(response: Response): Promise<string> {

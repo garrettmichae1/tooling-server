@@ -36,7 +36,7 @@ the instance; no cache volume is shared between jobs.
 
 If Cloudflare cannot allocate a container-backed actor, the private edge returns
 a fixed `capacity_limited` 429 so the purchase gateway releases the unused hold
-and run count. Unknown upstream failures return a fixed 503 and retain the
+and run count. Unknown upstream failures return a fixed 502 and retain the
 existing uncertain-outcome accounting. Raw platform errors are never forwarded.
 
 ## Boundary and limits

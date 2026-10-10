@@ -68,7 +68,7 @@ test('unknown platform failures stay uncertain and cannot expose arbitrary error
     const namespace=fetch=>({idFromName:id=>id,get:()=>({fetch})});
     const env={CODE_RUNNER_ENABLED:'true',CODE_CORE_JOB:namespace(upstream),CODE_ADMISSION:namespace(async()=>new Response('{}'))};
     const response=await serve(new Request('https://runner/'+uuid(102),{method:'POST',headers,body:JSON.stringify(input)}),env);
-    assert.equal(response.status,503);assert.deepEqual(await response.json(),{error:'runner_unavailable'});
+    assert.equal(response.status,502);assert.deepEqual(await response.json(),{error:'runner_unavailable'});
   }
 });
 function jobFixture(Class=CodeCoreJob){
