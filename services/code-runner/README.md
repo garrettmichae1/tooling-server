@@ -29,6 +29,11 @@ NuGet sources are cleared; Cargo and Go use offline resolution. Requests can be
 imported, but remote HTTP APIs are unavailable. Other databases, native mobile
 frameworks, GUI desktops and always-on backend services need a separate product design.
 
+The systems image prebuilds Go's standard-library cache so cold jobs stay within
+the compile/run deadline. Each job starts from that image seed on its own fresh
+microVM disk. Writable compiler cache and program artifacts are destroyed with
+the instance; no cache volume is shared between jobs.
+
 ## Boundary and limits
 
 `src/contract.ts` defines `edsger-execution-v1`; the verified backend mirrors the

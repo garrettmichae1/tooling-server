@@ -7,6 +7,12 @@ COPY --from=rust /usr/local/rustup /opt/rust/rustup
 RUN chmod -R a+rX /opt/rust
 RUN ln -s /opt/rust/cargo/bin/* /opt/rust/bin/
 
+# Compile standard packages once in the published image, rather than spending
+# each 30-second job rebuilding them. Cloudflare gives every job its own fresh
+# writable image disk and destroys it afterward; this cache is never a volume
+# shared across jobs. It contains only Go's pinned standard library at build time.
+RUN GOCACHE=/opt/go-cache GOMAXPROCS=1 GOPROXY=off GOSUMDB=off /opt/go/bin/go install -p 1 std && chown -R 65532:65532 /opt/go-cache
+
 # Controller has no secrets. Submitted programs are demoted to UID/GID 65532.
 RUN find / -xdev -type f -perm /6000 -exec chmod a-s {} + && mkdir -p /opt/edsger
 COPY runtime/runner.py /opt/edsger/runner.py
