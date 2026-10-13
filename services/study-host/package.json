@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "tsc --outDir .test-build && node --test tests/gateway.test.mjs tests/worksheet.test.mjs",
-    "check:runtime": "node tests/runtime-check.mjs && node tests/worksheet-runtime.mjs",
-    "check:container": "node tests/container-check.mjs && node tests/worksheet-container.mjs",
-    "build:check": "wrangler deploy --dry-run --outdir .wrangler/review",
+    "test": "tsc --outDir .test-build && node --test tests/gateway.test.mjs tests/worksheet.test.mjs tests/word-search.test.mjs",
+    "check:runtime": "node tests/runtime-check.mjs && node tests/worksheet-runtime.mjs && node tests/word-search-runtime.mjs",
+    "check:container": "node tests/container-check.mjs && node tests/worksheet-container.mjs && node tests/word-search-container.mjs",
+    "build:check": "wrangler deploy --dry-run --containers-rollout none --env=\"\" --outdir .wrangler/review",
     "deploy:sandbox": "wrangler deploy --env=\"\" --var STUDY_HOST_ENABLED:true --var WORKSHEET_HOST_ENABLED:true",
     "deploy:production": "wrangler deploy --env production --var STUDY_HOST_ENABLED:true --var WORKSHEET_HOST_ENABLED:true"
   },

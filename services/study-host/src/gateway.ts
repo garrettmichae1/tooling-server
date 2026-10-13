@@ -1,9 +1,10 @@
 import { strictStudyJSON, studyCall, STUDY_REQUEST_BYTES, STUDY_RESPONSE_BYTES } from "./contract.js";
+import { serveWordSearch, type WordSearchBindings } from "./word-search-gateway.js";
 import { serveWorksheet, type WorksheetBindings } from "./worksheet-gateway.js";
 
 // Structural binding type keeps admission testable without a container SDK or
 // payment backend. Only one operator-selected object name is ever reachable.
-export interface HostBindings extends WorksheetBindings {
+export interface HostBindings extends WorksheetBindings, WordSearchBindings {
   FIGURE_TOKEN?: string;
   STUDY_HOST_ENABLED?: string;
   STUDY_CONTAINER: { getByName(name: string): { fetch(request: Request): Promise<Response> } };
@@ -61,8 +62,9 @@ export async function serve(request: Request, env: HostBindings): Promise<Respon
   // Public liveness checks cover the edge only and never wake a billed container.
   // An authenticated fixed quiz verifies the Go process end to end.
   if (url.pathname === "/health" && request.method === "GET") {
-    return json({ ok: true, service: "edsger-study-tool-edge", tool: "make_study_app", worksheet_enabled: env.WORKSHEET_HOST_ENABLED === "true" && credential(env.FIGURE_TOKEN) && Boolean(env.WORKSHEET_IP_LIMIT && env.WORKSHEET_ADMISSION && env.WORKSHEET_CONTAINER), enabled: env.STUDY_HOST_ENABLED === "true" && credential(env.FIGURE_TOKEN) });
+    return json({ ok: true, service: "edsger-study-tool-edge", tool: "make_study_app", word_search_enabled: env.WORD_SEARCH_HOST_ENABLED === "true" && credential(env.FIGURE_TOKEN) && Boolean(env.WORD_SEARCH_IP_LIMIT && env.WORD_SEARCH_ADMISSION && env.WORD_SEARCH_CONTAINER), worksheet_enabled: env.WORKSHEET_HOST_ENABLED === "true" && credential(env.FIGURE_TOKEN) && Boolean(env.WORKSHEET_IP_LIMIT && env.WORKSHEET_ADMISSION && env.WORKSHEET_CONTAINER), enabled: env.STUDY_HOST_ENABLED === "true" && credential(env.FIGURE_TOKEN) });
   }
+  if (url.pathname === "/v1/word-searches") return serveWordSearch(request, env);
   if (url.pathname === "/v1/worksheets") return serveWorksheet(request, env);
   if (url.pathname !== "/v1/tools/call") return failure("not_found", 404);
   if (request.method !== "POST") return failure("method_not_allowed", 405);

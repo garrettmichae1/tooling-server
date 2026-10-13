@@ -34,6 +34,12 @@ func NewWorksheet(token string) (http.Handler, error) {
 	return newHost(token, "make_worksheet")
 }
 
+// NewWordSearch exposes only deterministic puzzle construction. It cannot call
+// a model, render executable code, or reach another study tool in this process.
+func NewWordSearch(token string) (http.Handler, error) {
+	return newHost(token, "make_word_search")
+}
+
 func newHost(token, toolName string) (http.Handler, error) {
 	if len(token) < 32 || len(token) > 256 {
 		return nil, errors.New("invalid_origin_credential")
@@ -45,6 +51,10 @@ func newHost(token, toolName string) (http.Handler, error) {
 	}
 	limit := ratelimit.New(RequestsPerMinute)
 	active := make(chan struct{}, 1)
+	requestLimit := int64(MaxRequestBytes)
+	if toolName == "make_word_search" {
+		requestLimit = 16_384
+	}
 	handler := auth.Middleware(token, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.RawQuery != "" || r.URL.ForceQuery || r.URL.EscapedPath() != r.URL.Path {
 			failure(w, http.StatusNotFound, "not_found")
@@ -81,7 +91,7 @@ func newHost(token, toolName string) (http.Handler, error) {
 			failure(w, http.StatusUnsupportedMediaType, "unsupported_media_type")
 			return
 		}
-		raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, MaxRequestBytes))
+		raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, requestLimit))
 		if err != nil {
 			var tooLarge *http.MaxBytesError
 			if errors.As(err, &tooLarge) {
@@ -109,6 +119,7 @@ func newHost(token, toolName string) (http.Handler, error) {
 		var args struct {
 			Questions []json.RawMessage `json:"questions"`
 			Exercises []json.RawMessage `json:"exercises"`
+			Words     []json.RawMessage `json:"words"`
 		}
 		if json.Unmarshal(call.Arguments, &args) != nil {
 			failure(w, http.StatusBadRequest, "invalid_request")
@@ -117,6 +128,9 @@ func newHost(token, toolName string) (http.Handler, error) {
 		count := len(args.Questions)
 		if toolName == "make_worksheet" {
 			count = len(args.Exercises)
+		}
+		if toolName == "make_word_search" {
+			count = len(args.Words)
 		}
 		if count < 1 || count > 30 {
 			failure(w, http.StatusBadRequest, "invalid_request")
@@ -128,8 +142,27 @@ func newHost(token, toolName string) (http.Handler, error) {
 		}
 		result, err := tools.Call(toolName, call.Arguments)
 		if err != nil {
+			var toolError *tools.Error
+			if toolName == "make_word_search" && errors.As(err, &toolError) && toolError.Code == "generation_failed" {
+				failure(w, http.StatusUnprocessableEntity, "generation_failed")
+				return
+			}
 			// Never return supplied question text or internal errors from this host.
 			failure(w, http.StatusBadRequest, "invalid_request")
+			return
+		}
+		if toolName == "make_word_search" {
+			if r.Context().Err() != nil {
+				failure(w, http.StatusRequestTimeout, "request_cancelled")
+				return
+			}
+			encoded, encodeErr := json.Marshal(map[string]any{"ok": true, "tool": toolName, "result": result})
+			if encodeErr != nil || len(encoded)+1 > 262_144 {
+				failure(w, http.StatusServiceUnavailable, "service_unavailable")
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write(append(encoded, '\n'))
 			return
 		}
 		respond(w, http.StatusOK, map[string]any{"ok": true, "tool": toolName, "result": result})

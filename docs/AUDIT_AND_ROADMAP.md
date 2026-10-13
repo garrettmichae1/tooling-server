@@ -10,7 +10,7 @@ The main barrier for smaller models was a long prose contract, detailed renderin
 
 | Finding | Change |
 | --- | --- |
-| Rendering was the only capability | 38 utilities across eight categories |
+| Rendering was the only capability | 40 utilities across eight categories |
 | No function catalog | Authenticated schemas/examples, category filtering, per-tool discovery |
 | Many endpoint shapes | Uniform call envelope plus direct per-tool routes |
 | Long art instructions consumed context | Separate short quickstart |
@@ -34,13 +34,15 @@ This is evidence for the stated contracts, not proof for all possible inputs or 
 
 ## Integration boundary
 
-A free/local model needs an agent loop supplying relevant schemas, validating the proposed call, attaching credentials, invoking the service, and feeding the result back. Hosted use also needs connectivity, per-user gateway authentication/limits, TLS, and policy. Do not embed a shared server token in a distributed phone app.
+A free/local model needs an agent loop supplying relevant schemas, validating the proposed call, attaching credentials, invoking the service, and feeding the result back. Hosted use also needs connectivity, gateway limits, TLS, and an explicit access policy; model generation retains its existing authentication and billing. Do not embed a shared server token in a distributed phone app.
 
-No Edsger app, model worker, subscription policy, or other repository changed. Utilities are server-ready, not automatically offline on the phone. This service remains loopback-bound and is not a public multi-tenant gateway.
+The word-search expansion changes no Edsger app, model worker, subscription policy, or other repository. Utilities are server-ready, not automatically integrated or offline on the phone. The generic catalog service remains loopback-bound; separate narrow Cloudflare study hosts provide explicitly limited routes. Word-search activation remains gated pending exact deployment approval.
 
 ## Offline artifact expansion
 
 Six additional tools create usable offline HTML study/data/sorting apps, real PNG/SVG sprites, WAV note sequences, and exact dependency schedules. Server-owned templates keep model arguments small and avoid generated executable code. Quiz progress is browser-local, not server/account storage. Browser checks exercise mobile/desktop layouts, controls, retry, persistence, export, unavailable storage, injection escaping, and zero network requests. The model caller still needs to save/share/preview returned files.
+
+The later worksheet and word-search utilities add separate printable question/puzzle and answer-key sheets. Word search also returns a versioned native grid/placement contract. Deterministic bounded generation verifies target placement and uniqueness mechanically; it does not verify vocabulary facts or theme relevance. Its independent hosted route has per-IP and persisted global quotas, a separate non-networked container, and default-off gates in sandbox and production. This change prepares the server only; no word-search deployment or iPhone UI integration has been performed. See [the integration and rollout boundary](WORD_SEARCH_HOSTING.md).
 
 ## Next priorities
 

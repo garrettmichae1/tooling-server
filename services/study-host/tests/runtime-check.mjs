@@ -14,7 +14,7 @@ if(origin && !/^http:\/\/127\.0\.0\.1:\d{1,5}$/.test(origin)) throw Error('test 
 const dir=await mkdtemp(join(tmpdir(),'edsger-study-runtime-'));
 const cli=resolve('node_modules/wrangler/bin/wrangler.js');
 const env={...process.env,WRANGLER_SEND_METRICS:'false',WRANGLER_LOG_PATH:join(dir,'wrangler.log')};
-const build=(args,config=resolve('wrangler.toml'))=>execFileSync(process.execPath,[cli,'deploy','--config',config,'--dry-run',...args],{stdio:'pipe',env});
+const build=(args,config=resolve('wrangler.toml'))=>execFileSync(process.execPath,[cli,'deploy','--config',config,'--dry-run','--containers-rollout','none','--env','',...args],{stdio:'pipe',env});
 const options=(script,extra={})=>convertV4MiniflareOptions({rootPath:dir,modulesRoot:dir,modules:true,scriptPath:script,compatibilityDate:'2026-10-08',compatibilityFlags:['nodejs_compat'],...extra});
 try {
   const full=join(dir,'full');build(['--outdir',full]);

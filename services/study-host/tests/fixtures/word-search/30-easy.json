@@ -1,0 +1,1494 @@
+{
+  "input": {
+    "arguments": {
+      "difficulty": "easy",
+      "title": "Linear algebra practice",
+      "words": [
+        "MATRIX",
+        "VECTOR",
+        "SCALAR",
+        "PIVOT",
+        "RANK",
+        "BASIS",
+        "SPACE",
+        "KERNEL",
+        "RANGE",
+        "IMAGE",
+        "SPAN",
+        "NULLITY",
+        "ROW",
+        "COLUMN",
+        "LINEAR",
+        "SYSTEM",
+        "EQUATION",
+        "SOLUTION",
+        "INVERSE",
+        "PRODUCT",
+        "TRACE",
+        "DETERMINANT",
+        "EIGENVALUE",
+        "EIGENVECTOR",
+        "DIAGONAL",
+        "ORTHOGONAL",
+        "PROJECTION",
+        "TRANSPOSE",
+        "IDENTITY",
+        "COEFFICIENT"
+      ]
+    },
+    "tool": "make_word_search"
+  },
+  "response": {
+    "ok": true,
+    "result": {
+      "answer_key_html": "\u003c!doctype html\u003e\u003chtml lang=\"en\"\u003e\u003chead\u003e\u003cmeta charset=\"utf-8\"\u003e\u003cmeta name=\"viewport\" content=\"width=device-width,initial-scale=1\"\u003e\u003cmeta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none';\"\u003e\u003ctitle\u003eEdsger word search\u003c/title\u003e\u003cstyle\u003e\n@page{size:letter;margin:16mm}*{box-sizing:border-box}body{margin:0;padding:32px;background:#eef3fb;color:#152238;font:16px/1.5 system-ui,sans-serif}header,main,footer{max-width:760px;margin:auto}header{padding:26px;background:white;border-top:5px solid #276ae5;border-radius:14px}.brand{font-size:11px;font-weight:700;letter-spacing:.16em;color:#276ae5}h1{font-size:30px;line-height:1.2;margin:12px 0;overflow-wrap:anywhere;white-space:pre-wrap}.subtitle,.instructions{font-size:13px;color:#617085}main{margin-top:20px;padding:26px;background:white;border-radius:14px}.grid{width:100%;table-layout:fixed;border-collapse:collapse;font:700 clamp(10px,2.3vw,20px)/1.5 ui-monospace,monospace;text-align:center}.grid td{border:1px solid #dce5f2;padding:3px 0}.found{background:#dbeafe;color:#1349a7;box-shadow:inset 0 0 0 1px #276ae5}.words{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;font-size:13px}.words li{overflow-wrap:anywhere}.coordinates{font-size:11px;columns:2;padding-left:20px}.coordinates li{break-inside:avoid;overflow-wrap:anywhere}footer{font-size:10px;color:#617085;padding:20px 0}@media print{body{background:white;padding:0}header{padding:0 0 12px;border-radius:0}main{padding:0;border-radius:0}h1{font-size:24pt}.grid{font-size:12pt;break-inside:avoid}.grid td{padding:1px 0}.found{background:#dbeafe!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.words{font-size:10pt}.coordinates{font-size:8pt}footer{font-size:8pt}}\n\u003c/style\u003e\u003c/head\u003e\u003cbody\u003e\u003cheader\u003e\u003cp class=\"brand\"\u003eEDSGER · ANSWER KEY\u003c/p\u003e\u003ch1\u003eLinear algebra practice\u003c/h1\u003e\u003cp class=\"subtitle\"\u003e30 words · easy · 19 × 19\u003c/p\u003e\u003c/header\u003e\u003cmain\u003e\u003ctable class=\"grid\" aria-label=\"Word search letter grid\"\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd class=\"found\"\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eP\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eD\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eV\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd class=\"found\"\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eJ\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eM\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eH\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eD\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd class=\"found\"\u003eM\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eX\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eU\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eY\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eM\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eD\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eF\u003c/td\u003e\u003ctd class=\"found\"\u003eF\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eU\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eB\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eK\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eQ\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eM\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eU\u003c/td\u003e\u003ctd class=\"found\"\u003eM\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eU\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eD\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eY\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eY\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd class=\"found\"\u003eW\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd class=\"found\"\u003eK\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003cul class=\"words\"\u003e\u003cli\u003eMATRIX\u003c/li\u003e\u003cli\u003eVECTOR\u003c/li\u003e\u003cli\u003eSCALAR\u003c/li\u003e\u003cli\u003ePIVOT\u003c/li\u003e\u003cli\u003eRANK\u003c/li\u003e\u003cli\u003eBASIS\u003c/li\u003e\u003cli\u003eSPACE\u003c/li\u003e\u003cli\u003eKERNEL\u003c/li\u003e\u003cli\u003eRANGE\u003c/li\u003e\u003cli\u003eIMAGE\u003c/li\u003e\u003cli\u003eSPAN\u003c/li\u003e\u003cli\u003eNULLITY\u003c/li\u003e\u003cli\u003eROW\u003c/li\u003e\u003cli\u003eCOLUMN\u003c/li\u003e\u003cli\u003eLINEAR\u003c/li\u003e\u003cli\u003eSYSTEM\u003c/li\u003e\u003cli\u003eEQUATION\u003c/li\u003e\u003cli\u003eSOLUTION\u003c/li\u003e\u003cli\u003eINVERSE\u003c/li\u003e\u003cli\u003ePRODUCT\u003c/li\u003e\u003cli\u003eTRACE\u003c/li\u003e\u003cli\u003eDETERMINANT\u003c/li\u003e\u003cli\u003eEIGENVALUE\u003c/li\u003e\u003cli\u003eEIGENVECTOR\u003c/li\u003e\u003cli\u003eDIAGONAL\u003c/li\u003e\u003cli\u003eORTHOGONAL\u003c/li\u003e\u003cli\u003ePROJECTION\u003c/li\u003e\u003cli\u003eTRANSPOSE\u003c/li\u003e\u003cli\u003eIDENTITY\u003c/li\u003e\u003cli\u003eCOEFFICIENT\u003c/li\u003e\u003c/ul\u003e\u003col class=\"coordinates\"\u003e\u003cli\u003eMATRIX: row 6, column 1 → row 6, column 6 (E)\u003c/li\u003e\u003cli\u003eVECTOR: row 9, column 7 → row 9, column 12 (E)\u003c/li\u003e\u003cli\u003eSCALAR: row 15, column 8 → row 15, column 13 (E)\u003c/li\u003e\u003cli\u003ePIVOT: row 2, column 3 → row 2, column 7 (E)\u003c/li\u003e\u003cli\u003eRANK: row 17, column 14 → row 17, column 17 (E)\u003c/li\u003e\u003cli\u003eBASIS: row 11, column 5 → row 15, column 5 (S)\u003c/li\u003e\u003cli\u003eSPACE: row 1, column 12 → row 5, column 12 (S)\u003c/li\u003e\u003cli\u003eKERNEL: row 11, column 8 → row 11, column 13 (E)\u003c/li\u003e\u003cli\u003eRANGE: row 12, column 4 → row 12, column 8 (E)\u003c/li\u003e\u003cli\u003eIMAGE: row 5, column 8 → row 5, column 12 (E)\u003c/li\u003e\u003cli\u003eSPAN: row 1, column 12 → row 1, column 15 (E)\u003c/li\u003e\u003cli\u003eNULLITY: row 9, column 15 → row 15, column 15 (S)\u003c/li\u003e\u003cli\u003eROW: row 15, column 13 → row 17, column 13 (S)\u003c/li\u003e\u003cli\u003eCOLUMN: row 12, column 13 → row 12, column 18 (E)\u003c/li\u003e\u003cli\u003eLINEAR: row 3, column 8 → row 3, column 13 (E)\u003c/li\u003e\u003cli\u003eSYSTEM: row 7, column 2 → row 7, column 7 (E)\u003c/li\u003e\u003cli\u003eEQUATION: row 10, column 16 → row 17, column 16 (S)\u003c/li\u003e\u003cli\u003eSOLUTION: row 13, column 5 → row 13, column 12 (E)\u003c/li\u003e\u003cli\u003eINVERSE: row 2, column 4 → row 8, column 4 (S)\u003c/li\u003e\u003cli\u003ePRODUCT: row 2, column 15 → row 8, column 15 (S)\u003c/li\u003e\u003cli\u003eTRACE: row 2, column 7 → row 2, column 11 (E)\u003c/li\u003e\u003cli\u003eDETERMINANT: row 7, column 10 → row 17, column 10 (S)\u003c/li\u003e\u003cli\u003eEIGENVALUE: row 10, column 7 → row 10, column 16 (E)\u003c/li\u003e\u003cli\u003eEIGENVECTOR: row 9, column 2 → row 9, column 12 (E)\u003c/li\u003e\u003cli\u003eDIAGONAL: row 3, column 14 → row 10, column 14 (S)\u003c/li\u003e\u003cli\u003eORTHOGONAL: row 2, column 13 → row 11, column 13 (S)\u003c/li\u003e\u003cli\u003ePROJECTION: row 4, column 7 → row 4, column 16 (E)\u003c/li\u003e\u003cli\u003eTRANSPOSE: row 16, column 7 → row 16, column 15 (E)\u003c/li\u003e\u003cli\u003eIDENTITY: row 14, column 7 → row 14, column 14 (E)\u003c/li\u003e\u003cli\u003eCOEFFICIENT: row 8, column 2 → row 8, column 12 (E)\u003c/li\u003e\u003c/ol\u003e\u003c/main\u003e\u003cfooter\u003eEach target has one verified location. Word meanings and theme are not independently verified.\u003cbr\u003eGenerator wordsearch-v1 · Seed 628884141\u003c/footer\u003e\u003c/body\u003e\u003c/html\u003e",
+      "content_verified": false,
+      "difficulty": "easy",
+      "directions": [
+        "E",
+        "S"
+      ],
+      "filename": "word-search.html",
+      "generator_version": "wordsearch-v1",
+      "grid": [
+        "RRRETNSRTWCSPANJFND",
+        "DUPIVOTRACEPOVPZLQD",
+        "DYINVSCLINEARDRMQYP",
+        "TPTVSYPROJECTIONKHT",
+        "LJREWGCIMAGEHADRDAP",
+        "MATRIXCJQVKNOGUZDPA",
+        "HSYSTEMMVDPVGOCMYYN",
+        "ACOEFFICIENTONTTJHE",
+        "HEIGENVECTORNANBBTW",
+        "YYBPBLEIGENVALUECVC",
+        "PCBVBRIKERNELKLQDST",
+        "AYBRANGEGMFPCOLUMNQ",
+        "WQKTSOLUTIONZXIAISC",
+        "XJQQILIDENTITYTTPXW",
+        "THOPSRRSCALARNYIIGU",
+        "PTCPOKTRANSPOSEOQWJ",
+        "KRIJBDSVDTFWWRANKYI",
+        "WZQLWHKZFZBWGGUPVJJ",
+        "BCTZKCOGEMODAKTADVA"
+      ],
+      "html": "\u003c!doctype html\u003e\u003chtml lang=\"en\"\u003e\u003chead\u003e\u003cmeta charset=\"utf-8\"\u003e\u003cmeta name=\"viewport\" content=\"width=device-width,initial-scale=1\"\u003e\u003cmeta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none';\"\u003e\u003ctitle\u003eEdsger word search\u003c/title\u003e\u003cstyle\u003e\n@page{size:letter;margin:16mm}*{box-sizing:border-box}body{margin:0;padding:32px;background:#eef3fb;color:#152238;font:16px/1.5 system-ui,sans-serif}header,main,footer{max-width:760px;margin:auto}header{padding:26px;background:white;border-top:5px solid #276ae5;border-radius:14px}.brand{font-size:11px;font-weight:700;letter-spacing:.16em;color:#276ae5}h1{font-size:30px;line-height:1.2;margin:12px 0;overflow-wrap:anywhere;white-space:pre-wrap}.subtitle,.instructions{font-size:13px;color:#617085}main{margin-top:20px;padding:26px;background:white;border-radius:14px}.grid{width:100%;table-layout:fixed;border-collapse:collapse;font:700 clamp(10px,2.3vw,20px)/1.5 ui-monospace,monospace;text-align:center}.grid td{border:1px solid #dce5f2;padding:3px 0}.found{background:#dbeafe;color:#1349a7;box-shadow:inset 0 0 0 1px #276ae5}.words{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;font-size:13px}.words li{overflow-wrap:anywhere}.coordinates{font-size:11px;columns:2;padding-left:20px}.coordinates li{break-inside:avoid;overflow-wrap:anywhere}footer{font-size:10px;color:#617085;padding:20px 0}@media print{body{background:white;padding:0}header{padding:0 0 12px;border-radius:0}main{padding:0;border-radius:0}h1{font-size:24pt}.grid{font-size:12pt;break-inside:avoid}.grid td{padding:1px 0}.found{background:#dbeafe!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.words{font-size:10pt}.coordinates{font-size:8pt}footer{font-size:8pt}}\n\u003c/style\u003e\u003c/head\u003e\u003cbody\u003e\u003cheader\u003e\u003cp class=\"brand\"\u003eEDSGER · WORD SEARCH\u003c/p\u003e\u003ch1\u003eLinear algebra practice\u003c/h1\u003e\u003cp class=\"subtitle\"\u003e30 words · easy · 19 × 19\u003c/p\u003e\u003c/header\u003e\u003cmain\u003e\u003cp class=\"instructions\"\u003eFind each word in a straight line. Spaces, hyphens and apostrophes are omitted from the grid.\u003c/p\u003e\u003ctable class=\"grid\" aria-label=\"Word search letter grid\"\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eQ\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eH\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eD\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003cul class=\"words\"\u003e\u003cli\u003eMATRIX\u003c/li\u003e\u003cli\u003eVECTOR\u003c/li\u003e\u003cli\u003eSCALAR\u003c/li\u003e\u003cli\u003ePIVOT\u003c/li\u003e\u003cli\u003eRANK\u003c/li\u003e\u003cli\u003eBASIS\u003c/li\u003e\u003cli\u003eSPACE\u003c/li\u003e\u003cli\u003eKERNEL\u003c/li\u003e\u003cli\u003eRANGE\u003c/li\u003e\u003cli\u003eIMAGE\u003c/li\u003e\u003cli\u003eSPAN\u003c/li\u003e\u003cli\u003eNULLITY\u003c/li\u003e\u003cli\u003eROW\u003c/li\u003e\u003cli\u003eCOLUMN\u003c/li\u003e\u003cli\u003eLINEAR\u003c/li\u003e\u003cli\u003eSYSTEM\u003c/li\u003e\u003cli\u003eEQUATION\u003c/li\u003e\u003cli\u003eSOLUTION\u003c/li\u003e\u003cli\u003eINVERSE\u003c/li\u003e\u003cli\u003ePRODUCT\u003c/li\u003e\u003cli\u003eTRACE\u003c/li\u003e\u003cli\u003eDETERMINANT\u003c/li\u003e\u003cli\u003eEIGENVALUE\u003c/li\u003e\u003cli\u003eEIGENVECTOR\u003c/li\u003e\u003cli\u003eDIAGONAL\u003c/li\u003e\u003cli\u003eORTHOGONAL\u003c/li\u003e\u003cli\u003ePROJECTION\u003c/li\u003e\u003cli\u003eTRANSPOSE\u003c/li\u003e\u003cli\u003eIDENTITY\u003c/li\u003e\u003cli\u003eCOEFFICIENT\u003c/li\u003e\u003c/ul\u003e\u003c/main\u003e\u003cfooter\u003eEach target has one verified location. Word meanings and theme are not independently verified.\u003cbr\u003eGenerator wordsearch-v1 · Seed 628884141\u003c/footer\u003e\u003c/body\u003e\u003c/html\u003e",
+      "media_type": "text/html; charset=utf-8",
+      "network_requests": false,
+      "offline": true,
+      "placements": [
+        {
+          "cells": [
+            {
+              "column": 0,
+              "row": 5
+            },
+            {
+              "column": 1,
+              "row": 5
+            },
+            {
+              "column": 2,
+              "row": 5
+            },
+            {
+              "column": 3,
+              "row": 5
+            },
+            {
+              "column": 4,
+              "row": 5
+            },
+            {
+              "column": 5,
+              "row": 5
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 5,
+            "row": 5
+          },
+          "start": {
+            "column": 0,
+            "row": 5
+          },
+          "word_id": 0
+        },
+        {
+          "cells": [
+            {
+              "column": 6,
+              "row": 8
+            },
+            {
+              "column": 7,
+              "row": 8
+            },
+            {
+              "column": 8,
+              "row": 8
+            },
+            {
+              "column": 9,
+              "row": 8
+            },
+            {
+              "column": 10,
+              "row": 8
+            },
+            {
+              "column": 11,
+              "row": 8
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 11,
+            "row": 8
+          },
+          "start": {
+            "column": 6,
+            "row": 8
+          },
+          "word_id": 1
+        },
+        {
+          "cells": [
+            {
+              "column": 7,
+              "row": 14
+            },
+            {
+              "column": 8,
+              "row": 14
+            },
+            {
+              "column": 9,
+              "row": 14
+            },
+            {
+              "column": 10,
+              "row": 14
+            },
+            {
+              "column": 11,
+              "row": 14
+            },
+            {
+              "column": 12,
+              "row": 14
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 12,
+            "row": 14
+          },
+          "start": {
+            "column": 7,
+            "row": 14
+          },
+          "word_id": 2
+        },
+        {
+          "cells": [
+            {
+              "column": 2,
+              "row": 1
+            },
+            {
+              "column": 3,
+              "row": 1
+            },
+            {
+              "column": 4,
+              "row": 1
+            },
+            {
+              "column": 5,
+              "row": 1
+            },
+            {
+              "column": 6,
+              "row": 1
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 6,
+            "row": 1
+          },
+          "start": {
+            "column": 2,
+            "row": 1
+          },
+          "word_id": 3
+        },
+        {
+          "cells": [
+            {
+              "column": 13,
+              "row": 16
+            },
+            {
+              "column": 14,
+              "row": 16
+            },
+            {
+              "column": 15,
+              "row": 16
+            },
+            {
+              "column": 16,
+              "row": 16
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 16,
+            "row": 16
+          },
+          "start": {
+            "column": 13,
+            "row": 16
+          },
+          "word_id": 4
+        },
+        {
+          "cells": [
+            {
+              "column": 4,
+              "row": 10
+            },
+            {
+              "column": 4,
+              "row": 11
+            },
+            {
+              "column": 4,
+              "row": 12
+            },
+            {
+              "column": 4,
+              "row": 13
+            },
+            {
+              "column": 4,
+              "row": 14
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 4,
+            "row": 14
+          },
+          "start": {
+            "column": 4,
+            "row": 10
+          },
+          "word_id": 5
+        },
+        {
+          "cells": [
+            {
+              "column": 11,
+              "row": 0
+            },
+            {
+              "column": 11,
+              "row": 1
+            },
+            {
+              "column": 11,
+              "row": 2
+            },
+            {
+              "column": 11,
+              "row": 3
+            },
+            {
+              "column": 11,
+              "row": 4
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 11,
+            "row": 4
+          },
+          "start": {
+            "column": 11,
+            "row": 0
+          },
+          "word_id": 6
+        },
+        {
+          "cells": [
+            {
+              "column": 7,
+              "row": 10
+            },
+            {
+              "column": 8,
+              "row": 10
+            },
+            {
+              "column": 9,
+              "row": 10
+            },
+            {
+              "column": 10,
+              "row": 10
+            },
+            {
+              "column": 11,
+              "row": 10
+            },
+            {
+              "column": 12,
+              "row": 10
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 12,
+            "row": 10
+          },
+          "start": {
+            "column": 7,
+            "row": 10
+          },
+          "word_id": 7
+        },
+        {
+          "cells": [
+            {
+              "column": 3,
+              "row": 11
+            },
+            {
+              "column": 4,
+              "row": 11
+            },
+            {
+              "column": 5,
+              "row": 11
+            },
+            {
+              "column": 6,
+              "row": 11
+            },
+            {
+              "column": 7,
+              "row": 11
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 7,
+            "row": 11
+          },
+          "start": {
+            "column": 3,
+            "row": 11
+          },
+          "word_id": 8
+        },
+        {
+          "cells": [
+            {
+              "column": 7,
+              "row": 4
+            },
+            {
+              "column": 8,
+              "row": 4
+            },
+            {
+              "column": 9,
+              "row": 4
+            },
+            {
+              "column": 10,
+              "row": 4
+            },
+            {
+              "column": 11,
+              "row": 4
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 11,
+            "row": 4
+          },
+          "start": {
+            "column": 7,
+            "row": 4
+          },
+          "word_id": 9
+        },
+        {
+          "cells": [
+            {
+              "column": 11,
+              "row": 0
+            },
+            {
+              "column": 12,
+              "row": 0
+            },
+            {
+              "column": 13,
+              "row": 0
+            },
+            {
+              "column": 14,
+              "row": 0
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 14,
+            "row": 0
+          },
+          "start": {
+            "column": 11,
+            "row": 0
+          },
+          "word_id": 10
+        },
+        {
+          "cells": [
+            {
+              "column": 14,
+              "row": 8
+            },
+            {
+              "column": 14,
+              "row": 9
+            },
+            {
+              "column": 14,
+              "row": 10
+            },
+            {
+              "column": 14,
+              "row": 11
+            },
+            {
+              "column": 14,
+              "row": 12
+            },
+            {
+              "column": 14,
+              "row": 13
+            },
+            {
+              "column": 14,
+              "row": 14
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 14,
+            "row": 14
+          },
+          "start": {
+            "column": 14,
+            "row": 8
+          },
+          "word_id": 11
+        },
+        {
+          "cells": [
+            {
+              "column": 12,
+              "row": 14
+            },
+            {
+              "column": 12,
+              "row": 15
+            },
+            {
+              "column": 12,
+              "row": 16
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 12,
+            "row": 16
+          },
+          "start": {
+            "column": 12,
+            "row": 14
+          },
+          "word_id": 12
+        },
+        {
+          "cells": [
+            {
+              "column": 12,
+              "row": 11
+            },
+            {
+              "column": 13,
+              "row": 11
+            },
+            {
+              "column": 14,
+              "row": 11
+            },
+            {
+              "column": 15,
+              "row": 11
+            },
+            {
+              "column": 16,
+              "row": 11
+            },
+            {
+              "column": 17,
+              "row": 11
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 17,
+            "row": 11
+          },
+          "start": {
+            "column": 12,
+            "row": 11
+          },
+          "word_id": 13
+        },
+        {
+          "cells": [
+            {
+              "column": 7,
+              "row": 2
+            },
+            {
+              "column": 8,
+              "row": 2
+            },
+            {
+              "column": 9,
+              "row": 2
+            },
+            {
+              "column": 10,
+              "row": 2
+            },
+            {
+              "column": 11,
+              "row": 2
+            },
+            {
+              "column": 12,
+              "row": 2
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 12,
+            "row": 2
+          },
+          "start": {
+            "column": 7,
+            "row": 2
+          },
+          "word_id": 14
+        },
+        {
+          "cells": [
+            {
+              "column": 1,
+              "row": 6
+            },
+            {
+              "column": 2,
+              "row": 6
+            },
+            {
+              "column": 3,
+              "row": 6
+            },
+            {
+              "column": 4,
+              "row": 6
+            },
+            {
+              "column": 5,
+              "row": 6
+            },
+            {
+              "column": 6,
+              "row": 6
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 6,
+            "row": 6
+          },
+          "start": {
+            "column": 1,
+            "row": 6
+          },
+          "word_id": 15
+        },
+        {
+          "cells": [
+            {
+              "column": 15,
+              "row": 9
+            },
+            {
+              "column": 15,
+              "row": 10
+            },
+            {
+              "column": 15,
+              "row": 11
+            },
+            {
+              "column": 15,
+              "row": 12
+            },
+            {
+              "column": 15,
+              "row": 13
+            },
+            {
+              "column": 15,
+              "row": 14
+            },
+            {
+              "column": 15,
+              "row": 15
+            },
+            {
+              "column": 15,
+              "row": 16
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 15,
+            "row": 16
+          },
+          "start": {
+            "column": 15,
+            "row": 9
+          },
+          "word_id": 16
+        },
+        {
+          "cells": [
+            {
+              "column": 4,
+              "row": 12
+            },
+            {
+              "column": 5,
+              "row": 12
+            },
+            {
+              "column": 6,
+              "row": 12
+            },
+            {
+              "column": 7,
+              "row": 12
+            },
+            {
+              "column": 8,
+              "row": 12
+            },
+            {
+              "column": 9,
+              "row": 12
+            },
+            {
+              "column": 10,
+              "row": 12
+            },
+            {
+              "column": 11,
+              "row": 12
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 11,
+            "row": 12
+          },
+          "start": {
+            "column": 4,
+            "row": 12
+          },
+          "word_id": 17
+        },
+        {
+          "cells": [
+            {
+              "column": 3,
+              "row": 1
+            },
+            {
+              "column": 3,
+              "row": 2
+            },
+            {
+              "column": 3,
+              "row": 3
+            },
+            {
+              "column": 3,
+              "row": 4
+            },
+            {
+              "column": 3,
+              "row": 5
+            },
+            {
+              "column": 3,
+              "row": 6
+            },
+            {
+              "column": 3,
+              "row": 7
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 3,
+            "row": 7
+          },
+          "start": {
+            "column": 3,
+            "row": 1
+          },
+          "word_id": 18
+        },
+        {
+          "cells": [
+            {
+              "column": 14,
+              "row": 1
+            },
+            {
+              "column": 14,
+              "row": 2
+            },
+            {
+              "column": 14,
+              "row": 3
+            },
+            {
+              "column": 14,
+              "row": 4
+            },
+            {
+              "column": 14,
+              "row": 5
+            },
+            {
+              "column": 14,
+              "row": 6
+            },
+            {
+              "column": 14,
+              "row": 7
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 14,
+            "row": 7
+          },
+          "start": {
+            "column": 14,
+            "row": 1
+          },
+          "word_id": 19
+        },
+        {
+          "cells": [
+            {
+              "column": 6,
+              "row": 1
+            },
+            {
+              "column": 7,
+              "row": 1
+            },
+            {
+              "column": 8,
+              "row": 1
+            },
+            {
+              "column": 9,
+              "row": 1
+            },
+            {
+              "column": 10,
+              "row": 1
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 10,
+            "row": 1
+          },
+          "start": {
+            "column": 6,
+            "row": 1
+          },
+          "word_id": 20
+        },
+        {
+          "cells": [
+            {
+              "column": 9,
+              "row": 6
+            },
+            {
+              "column": 9,
+              "row": 7
+            },
+            {
+              "column": 9,
+              "row": 8
+            },
+            {
+              "column": 9,
+              "row": 9
+            },
+            {
+              "column": 9,
+              "row": 10
+            },
+            {
+              "column": 9,
+              "row": 11
+            },
+            {
+              "column": 9,
+              "row": 12
+            },
+            {
+              "column": 9,
+              "row": 13
+            },
+            {
+              "column": 9,
+              "row": 14
+            },
+            {
+              "column": 9,
+              "row": 15
+            },
+            {
+              "column": 9,
+              "row": 16
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 9,
+            "row": 16
+          },
+          "start": {
+            "column": 9,
+            "row": 6
+          },
+          "word_id": 21
+        },
+        {
+          "cells": [
+            {
+              "column": 6,
+              "row": 9
+            },
+            {
+              "column": 7,
+              "row": 9
+            },
+            {
+              "column": 8,
+              "row": 9
+            },
+            {
+              "column": 9,
+              "row": 9
+            },
+            {
+              "column": 10,
+              "row": 9
+            },
+            {
+              "column": 11,
+              "row": 9
+            },
+            {
+              "column": 12,
+              "row": 9
+            },
+            {
+              "column": 13,
+              "row": 9
+            },
+            {
+              "column": 14,
+              "row": 9
+            },
+            {
+              "column": 15,
+              "row": 9
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 15,
+            "row": 9
+          },
+          "start": {
+            "column": 6,
+            "row": 9
+          },
+          "word_id": 22
+        },
+        {
+          "cells": [
+            {
+              "column": 1,
+              "row": 8
+            },
+            {
+              "column": 2,
+              "row": 8
+            },
+            {
+              "column": 3,
+              "row": 8
+            },
+            {
+              "column": 4,
+              "row": 8
+            },
+            {
+              "column": 5,
+              "row": 8
+            },
+            {
+              "column": 6,
+              "row": 8
+            },
+            {
+              "column": 7,
+              "row": 8
+            },
+            {
+              "column": 8,
+              "row": 8
+            },
+            {
+              "column": 9,
+              "row": 8
+            },
+            {
+              "column": 10,
+              "row": 8
+            },
+            {
+              "column": 11,
+              "row": 8
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 11,
+            "row": 8
+          },
+          "start": {
+            "column": 1,
+            "row": 8
+          },
+          "word_id": 23
+        },
+        {
+          "cells": [
+            {
+              "column": 13,
+              "row": 2
+            },
+            {
+              "column": 13,
+              "row": 3
+            },
+            {
+              "column": 13,
+              "row": 4
+            },
+            {
+              "column": 13,
+              "row": 5
+            },
+            {
+              "column": 13,
+              "row": 6
+            },
+            {
+              "column": 13,
+              "row": 7
+            },
+            {
+              "column": 13,
+              "row": 8
+            },
+            {
+              "column": 13,
+              "row": 9
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 13,
+            "row": 9
+          },
+          "start": {
+            "column": 13,
+            "row": 2
+          },
+          "word_id": 24
+        },
+        {
+          "cells": [
+            {
+              "column": 12,
+              "row": 1
+            },
+            {
+              "column": 12,
+              "row": 2
+            },
+            {
+              "column": 12,
+              "row": 3
+            },
+            {
+              "column": 12,
+              "row": 4
+            },
+            {
+              "column": 12,
+              "row": 5
+            },
+            {
+              "column": 12,
+              "row": 6
+            },
+            {
+              "column": 12,
+              "row": 7
+            },
+            {
+              "column": 12,
+              "row": 8
+            },
+            {
+              "column": 12,
+              "row": 9
+            },
+            {
+              "column": 12,
+              "row": 10
+            }
+          ],
+          "direction": "S",
+          "end": {
+            "column": 12,
+            "row": 10
+          },
+          "start": {
+            "column": 12,
+            "row": 1
+          },
+          "word_id": 25
+        },
+        {
+          "cells": [
+            {
+              "column": 6,
+              "row": 3
+            },
+            {
+              "column": 7,
+              "row": 3
+            },
+            {
+              "column": 8,
+              "row": 3
+            },
+            {
+              "column": 9,
+              "row": 3
+            },
+            {
+              "column": 10,
+              "row": 3
+            },
+            {
+              "column": 11,
+              "row": 3
+            },
+            {
+              "column": 12,
+              "row": 3
+            },
+            {
+              "column": 13,
+              "row": 3
+            },
+            {
+              "column": 14,
+              "row": 3
+            },
+            {
+              "column": 15,
+              "row": 3
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 15,
+            "row": 3
+          },
+          "start": {
+            "column": 6,
+            "row": 3
+          },
+          "word_id": 26
+        },
+        {
+          "cells": [
+            {
+              "column": 6,
+              "row": 15
+            },
+            {
+              "column": 7,
+              "row": 15
+            },
+            {
+              "column": 8,
+              "row": 15
+            },
+            {
+              "column": 9,
+              "row": 15
+            },
+            {
+              "column": 10,
+              "row": 15
+            },
+            {
+              "column": 11,
+              "row": 15
+            },
+            {
+              "column": 12,
+              "row": 15
+            },
+            {
+              "column": 13,
+              "row": 15
+            },
+            {
+              "column": 14,
+              "row": 15
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 14,
+            "row": 15
+          },
+          "start": {
+            "column": 6,
+            "row": 15
+          },
+          "word_id": 27
+        },
+        {
+          "cells": [
+            {
+              "column": 6,
+              "row": 13
+            },
+            {
+              "column": 7,
+              "row": 13
+            },
+            {
+              "column": 8,
+              "row": 13
+            },
+            {
+              "column": 9,
+              "row": 13
+            },
+            {
+              "column": 10,
+              "row": 13
+            },
+            {
+              "column": 11,
+              "row": 13
+            },
+            {
+              "column": 12,
+              "row": 13
+            },
+            {
+              "column": 13,
+              "row": 13
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 13,
+            "row": 13
+          },
+          "start": {
+            "column": 6,
+            "row": 13
+          },
+          "word_id": 28
+        },
+        {
+          "cells": [
+            {
+              "column": 1,
+              "row": 7
+            },
+            {
+              "column": 2,
+              "row": 7
+            },
+            {
+              "column": 3,
+              "row": 7
+            },
+            {
+              "column": 4,
+              "row": 7
+            },
+            {
+              "column": 5,
+              "row": 7
+            },
+            {
+              "column": 6,
+              "row": 7
+            },
+            {
+              "column": 7,
+              "row": 7
+            },
+            {
+              "column": 8,
+              "row": 7
+            },
+            {
+              "column": 9,
+              "row": 7
+            },
+            {
+              "column": 10,
+              "row": 7
+            },
+            {
+              "column": 11,
+              "row": 7
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 11,
+            "row": 7
+          },
+          "start": {
+            "column": 1,
+            "row": 7
+          },
+          "word_id": 29
+        }
+      ],
+      "preview_requires_scripts": false,
+      "puzzle_id": "b8e39dee449d5c2b5614569b8314ef1b20f62b1f69caffc591e842d7fab02f60",
+      "puzzle_verified": true,
+      "schema_version": 1,
+      "seed": 628884141,
+      "size": 19,
+      "title": "Linear algebra practice",
+      "words": [
+        {
+          "id": 0,
+          "label": "MATRIX",
+          "letters": "MATRIX"
+        },
+        {
+          "id": 1,
+          "label": "VECTOR",
+          "letters": "VECTOR"
+        },
+        {
+          "id": 2,
+          "label": "SCALAR",
+          "letters": "SCALAR"
+        },
+        {
+          "id": 3,
+          "label": "PIVOT",
+          "letters": "PIVOT"
+        },
+        {
+          "id": 4,
+          "label": "RANK",
+          "letters": "RANK"
+        },
+        {
+          "id": 5,
+          "label": "BASIS",
+          "letters": "BASIS"
+        },
+        {
+          "id": 6,
+          "label": "SPACE",
+          "letters": "SPACE"
+        },
+        {
+          "id": 7,
+          "label": "KERNEL",
+          "letters": "KERNEL"
+        },
+        {
+          "id": 8,
+          "label": "RANGE",
+          "letters": "RANGE"
+        },
+        {
+          "id": 9,
+          "label": "IMAGE",
+          "letters": "IMAGE"
+        },
+        {
+          "id": 10,
+          "label": "SPAN",
+          "letters": "SPAN"
+        },
+        {
+          "id": 11,
+          "label": "NULLITY",
+          "letters": "NULLITY"
+        },
+        {
+          "id": 12,
+          "label": "ROW",
+          "letters": "ROW"
+        },
+        {
+          "id": 13,
+          "label": "COLUMN",
+          "letters": "COLUMN"
+        },
+        {
+          "id": 14,
+          "label": "LINEAR",
+          "letters": "LINEAR"
+        },
+        {
+          "id": 15,
+          "label": "SYSTEM",
+          "letters": "SYSTEM"
+        },
+        {
+          "id": 16,
+          "label": "EQUATION",
+          "letters": "EQUATION"
+        },
+        {
+          "id": 17,
+          "label": "SOLUTION",
+          "letters": "SOLUTION"
+        },
+        {
+          "id": 18,
+          "label": "INVERSE",
+          "letters": "INVERSE"
+        },
+        {
+          "id": 19,
+          "label": "PRODUCT",
+          "letters": "PRODUCT"
+        },
+        {
+          "id": 20,
+          "label": "TRACE",
+          "letters": "TRACE"
+        },
+        {
+          "id": 21,
+          "label": "DETERMINANT",
+          "letters": "DETERMINANT"
+        },
+        {
+          "id": 22,
+          "label": "EIGENVALUE",
+          "letters": "EIGENVALUE"
+        },
+        {
+          "id": 23,
+          "label": "EIGENVECTOR",
+          "letters": "EIGENVECTOR"
+        },
+        {
+          "id": 24,
+          "label": "DIAGONAL",
+          "letters": "DIAGONAL"
+        },
+        {
+          "id": 25,
+          "label": "ORTHOGONAL",
+          "letters": "ORTHOGONAL"
+        },
+        {
+          "id": 26,
+          "label": "PROJECTION",
+          "letters": "PROJECTION"
+        },
+        {
+          "id": 27,
+          "label": "TRANSPOSE",
+          "letters": "TRANSPOSE"
+        },
+        {
+          "id": 28,
+          "label": "IDENTITY",
+          "letters": "IDENTITY"
+        },
+        {
+          "id": 29,
+          "label": "COEFFICIENT",
+          "letters": "COEFFICIENT"
+        }
+      ]
+    },
+    "tool": "make_word_search"
+  }
+}

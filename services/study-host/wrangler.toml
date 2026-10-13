@@ -12,6 +12,7 @@ routes = [{ pattern = "tools-sandbox.edsger.app", custom_domain = true }]
 [vars]
 STUDY_HOST_ENABLED = "false"
 WORKSHEET_HOST_ENABLED = "false"
+WORD_SEARCH_HOST_ENABLED = "false"
 
 [observability]
 enabled = false
@@ -61,6 +62,7 @@ routes = [{ pattern = "tools.edsger.app", custom_domain = true }]
 [env.production.vars]
 STUDY_HOST_ENABLED = "false"
 WORKSHEET_HOST_ENABLED = "false"
+WORD_SEARCH_HOST_ENABLED = "false"
 [env.production.observability]
 enabled = false
 [[env.production.durable_objects.bindings]]
@@ -107,4 +109,49 @@ max_instances = 1
 instance_type = "lite"
 
 [containers.observability]
+enabled = false
+
+# Word searches have independent objects, budgets and network-disabled instances.
+[[durable_objects.bindings]]
+name = "WORD_SEARCH_CONTAINER"
+class_name = "WordSearchContainer"
+[[durable_objects.bindings]]
+name = "WORD_SEARCH_ADMISSION"
+class_name = "WordSearchAdmission"
+[[ratelimits]]
+name = "WORD_SEARCH_IP_LIMIT"
+namespace_id = "1005"
+simple = { limit = 4, period = 60 }
+[[migrations]]
+tag = "v3-word-search-isolation"
+new_sqlite_classes = ["WordSearchContainer", "WordSearchAdmission"]
+[[containers]]
+class_name = "WordSearchContainer"
+image = "Dockerfile"
+image_build_context = "../.."
+max_instances = 1
+instance_type = "lite"
+[containers.observability]
+enabled = false
+
+[[env.production.durable_objects.bindings]]
+name = "WORD_SEARCH_CONTAINER"
+class_name = "WordSearchContainer"
+[[env.production.durable_objects.bindings]]
+name = "WORD_SEARCH_ADMISSION"
+class_name = "WordSearchAdmission"
+[[env.production.ratelimits]]
+name = "WORD_SEARCH_IP_LIMIT"
+namespace_id = "1006"
+simple = { limit = 4, period = 60 }
+[[env.production.migrations]]
+tag = "v3-word-search-isolation"
+new_sqlite_classes = ["WordSearchContainer", "WordSearchAdmission"]
+[[env.production.containers]]
+class_name = "WordSearchContainer"
+image = "Dockerfile"
+image_build_context = "../.."
+max_instances = 1
+instance_type = "lite"
+[env.production.containers.observability]
 enabled = false

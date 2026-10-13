@@ -30,6 +30,10 @@ jobs:
         run: go vet ./...
       - name: Test and detect races
         run: go test -race ./...
+      - name: Check native word-search fixtures independently
+        run: |
+          go run scripts/word-search-fixtures.go -check
+          python3 -B scripts/validate-word-search-fixtures.py --self-test
       - name: Fuzz utility calls
         env:
           GOMAXPROCS: '2'

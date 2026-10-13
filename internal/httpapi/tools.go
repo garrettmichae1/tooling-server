@@ -84,7 +84,7 @@ func (s *Server) runTool(w http.ResponseWriter, name string, raw json.RawMessage
 		if detail.Code == "unknown_tool" {
 			code = http.StatusNotFound
 		}
-		if detail.Code == "result_too_large" || detail.Code == "numeric_range" {
+		if detail.Code == "result_too_large" || detail.Code == "numeric_range" || detail.Code == "generation_failed" {
 			code = http.StatusUnprocessableEntity
 		}
 		if detail.Code == "tool_failed" {
