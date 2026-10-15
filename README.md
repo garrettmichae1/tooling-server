@@ -1,6 +1,6 @@
 # Edsger tooling server
 
-A loopback Go service with **39 single-call utility tools**, plus the existing poster, PDF handout, chart, printable-object, and molecule tools. Utilities run in-process using the Go standard library: no paid model APIs, subprocesses, network requests, or persistent user data. They accept structured arguments rather than interpreting English.
+A loopback Go service with **40 single-call utility tools**, plus the existing poster, PDF handout, chart, printable-object, and molecule tools. Utilities run in-process using the Go standard library: no paid model APIs, subprocesses, network requests, or persistent user data. They accept structured arguments rather than interpreting English.
 
 Create useful take-away artifacts: an offline quiz with retry-missed practice, an interactive data dashboard, a sorting lab with playback, transparent pixel-art PNG/SVG sprites, WAV melodies, or a dependency-aware project plan. The three HTML apps embed everything they need and work offline after saving. [Export behavior and app integration](docs/TOOLS.md#interactive-exports-and-integration).
 
@@ -15,6 +15,8 @@ for boundaries, deployment, recovery and the separate future app rollout.
 
 The second iPhone tool is **Create Worksheet**, with independent free-rendering limits and a separate container. Sandbox and production have separate configurations and credentials; see [docs/WORKSHEET_HOSTING.md](docs/WORKSHEET_HOSTING.md). It adds no paid-model or payment-backend route.
 
+**Create Word Search** adds a deterministic, mechanically verified letter grid, native-friendly cell coordinates, and separate printable puzzle and solution sheets. Its independent hosted route remains disabled until an exact deployment is approved. This is server preparation only; the iPhone app has not been integrated. See [the API and rollout guide](docs/WORD_SEARCH_HOSTING.md).
+
 The IDE uses the separate private [code runner](services/code-runner/README.md),
 supporting 19 languages and curated libraries. That service must run in the
 purchase gateway's Cloudflare account, independently of this site's domain.
@@ -23,7 +25,7 @@ The user-facing names are **Make Poster** for a figure, **Make Handout** for a P
 
 ## Run
 
-For all 39 utilities, install Go 1.27 or newer and start without rendering binaries:
+For all 40 utilities, install Go 1.27 or newer and start without rendering binaries:
 
 ```sh
 export FIGURE_TOKEN="$(openssl rand -base64 32)"
@@ -58,7 +60,7 @@ go run ./cmd/figureserver
 
 ## Agent contract
 
-`GET /v1/quickstart` returns short [agent instructions](docs/QUICKSTART.md). `GET /v1/tools` returns names, descriptions, categories, JSON schemas, and runnable examples for all 39 utilities, plus configured legacy renderer availability. Filter with `?category=math`, `data`, `developer`, `writing`, `study`, `planning`, `visuals`, or `audio`. Fetch one definition with `GET /v1/tools/{name}`.
+`GET /v1/quickstart` returns short [agent instructions](docs/QUICKSTART.md). `GET /v1/tools` returns names, descriptions, categories, JSON schemas, and runnable examples for all 40 utilities, plus configured legacy renderer availability. Filter with `?category=math`, `data`, `developer`, `writing`, `study`, `planning`, `visuals`, or `audio`. Fetch one definition with `GET /v1/tools/{name}`.
 
 The trusted caller attaches `Authorization: Bearer $FIGURE_TOKEN` on every endpoint except health. A model emits only the tool name and arguments:
 

@@ -3,9 +3,11 @@ import { serve, type HostBindings } from "./gateway.js";
 
 interface Env extends HostBindings {
   STUDY_CONTAINER: DurableObjectNamespace<StudyContainer>;
+  WORD_SEARCH_CONTAINER: DurableObjectNamespace<WordSearchContainer>;
   WORKSHEET_CONTAINER: DurableObjectNamespace<WorksheetContainer>;
 }
 
+export { WordSearchAdmission } from "./word-search-admission.js";
 export { WorksheetAdmission } from "./worksheet-admission.js";
 
 export class StudyContainer extends Container<Env> {
@@ -44,6 +46,14 @@ export class WorksheetContainer extends StudyContainer {
   constructor(ctx: DurableObjectState<{}>, env: Env) {
     super(ctx, env);
     this.envVars = { FIGURE_TOKEN: env.FIGURE_TOKEN ?? "", WORKSHEET_ONLY: "true" };
+  }
+}
+
+// Its own instance and quota namespace; no worksheet or quiz selector is set.
+export class WordSearchContainer extends StudyContainer {
+  constructor(ctx: DurableObjectState<{}>, env: Env) {
+    super(ctx, env);
+    this.envVars = { FIGURE_TOKEN: env.FIGURE_TOKEN ?? "", WORD_SEARCH_ONLY: "true" };
   }
 }
 

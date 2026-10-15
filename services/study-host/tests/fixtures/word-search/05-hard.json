@@ -1,0 +1,265 @@
+{
+  "input": {
+    "arguments": {
+      "difficulty": "hard",
+      "title": "Linear algebra practice",
+      "words": [
+        "MATRIX",
+        "VECTOR",
+        "SCALAR",
+        "PIVOT",
+        "RANK"
+      ]
+    },
+    "tool": "make_word_search"
+  },
+  "response": {
+    "ok": true,
+    "result": {
+      "answer_key_html": "\u003c!doctype html\u003e\u003chtml lang=\"en\"\u003e\u003chead\u003e\u003cmeta charset=\"utf-8\"\u003e\u003cmeta name=\"viewport\" content=\"width=device-width,initial-scale=1\"\u003e\u003cmeta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none';\"\u003e\u003ctitle\u003eEdsger word search\u003c/title\u003e\u003cstyle\u003e\n@page{size:letter;margin:16mm}*{box-sizing:border-box}body{margin:0;padding:32px;background:#eef3fb;color:#152238;font:16px/1.5 system-ui,sans-serif}header,main,footer{max-width:760px;margin:auto}header{padding:26px;background:white;border-top:5px solid #276ae5;border-radius:14px}.brand{font-size:11px;font-weight:700;letter-spacing:.16em;color:#276ae5}h1{font-size:30px;line-height:1.2;margin:12px 0;overflow-wrap:anywhere;white-space:pre-wrap}.subtitle,.instructions{font-size:13px;color:#617085}main{margin-top:20px;padding:26px;background:white;border-radius:14px}.grid{width:100%;table-layout:fixed;border-collapse:collapse;font:700 clamp(10px,2.3vw,20px)/1.5 ui-monospace,monospace;text-align:center}.grid td{border:1px solid #dce5f2;padding:3px 0}.found{background:#dbeafe;color:#1349a7;box-shadow:inset 0 0 0 1px #276ae5}.words{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;font-size:13px}.words li{overflow-wrap:anywhere}.coordinates{font-size:11px;columns:2;padding-left:20px}.coordinates li{break-inside:avoid;overflow-wrap:anywhere}footer{font-size:10px;color:#617085;padding:20px 0}@media print{body{background:white;padding:0}header{padding:0 0 12px;border-radius:0}main{padding:0;border-radius:0}h1{font-size:24pt}.grid{font-size:12pt;break-inside:avoid}.grid td{padding:1px 0}.found{background:#dbeafe!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.words{font-size:10pt}.coordinates{font-size:8pt}footer{font-size:8pt}}\n\u003c/style\u003e\u003c/head\u003e\u003cbody\u003e\u003cheader\u003e\u003cp class=\"brand\"\u003eEDSGER · ANSWER KEY\u003c/p\u003e\u003ch1\u003eLinear algebra practice\u003c/h1\u003e\u003cp class=\"subtitle\"\u003e5 words · hard · 8 × 8\u003c/p\u003e\u003c/header\u003e\u003cmain\u003e\u003ctable class=\"grid\" aria-label=\"Word search letter grid\"\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eL\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd class=\"found\"\u003eX\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd class=\"found\"\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eE\u003c/td\u003e\u003ctd class=\"found\"\u003eC\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003ctd class=\"found\"\u003eO\u003c/td\u003e\u003ctd class=\"found\"\u003eR\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd class=\"found\"\u003eI\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd class=\"found\"\u003eS\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003ctd class=\"found\"\u003eT\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd class=\"found\"\u003eP\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd class=\"found\"\u003eN\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd class=\"found\"\u003eA\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd class=\"found\"\u003eK\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd class=\"found\"\u003eM\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003cul class=\"words\"\u003e\u003cli\u003eMATRIX\u003c/li\u003e\u003cli\u003eVECTOR\u003c/li\u003e\u003cli\u003eSCALAR\u003c/li\u003e\u003cli\u003ePIVOT\u003c/li\u003e\u003cli\u003eRANK\u003c/li\u003e\u003c/ul\u003e\u003col class=\"coordinates\"\u003e\u003cli\u003eMATRIX: row 8, column 8 → row 3, column 8 (N)\u003c/li\u003e\u003cli\u003eVECTOR: row 5, column 3 → row 5, column 8 (E)\u003c/li\u003e\u003cli\u003eSCALAR: row 6, column 5 → row 1, column 5 (N)\u003c/li\u003e\u003cli\u003ePIVOT: row 7, column 3 → row 3, column 3 (N)\u003c/li\u003e\u003cli\u003eRANK: row 5, column 8 → row 8, column 5 (SW)\u003c/li\u003e\u003c/ol\u003e\u003c/main\u003e\u003cfooter\u003eEach target has one verified location. Word meanings and theme are not independently verified.\u003cbr\u003eGenerator wordsearch-v1 · Seed 306070584\u003c/footer\u003e\u003c/body\u003e\u003c/html\u003e",
+      "content_verified": false,
+      "difficulty": "hard",
+      "directions": [
+        "E",
+        "S",
+        "SE",
+        "NE",
+        "W",
+        "N",
+        "NW",
+        "SW"
+      ],
+      "filename": "word-search.html",
+      "generator_version": "wordsearch-v1",
+      "grid": [
+        "XZCFRKCZ",
+        "CLYJAEAW",
+        "TPTGLYFX",
+        "ILOSAMVI",
+        "UFVECTOR",
+        "MLIGSIAT",
+        "SYPPVNXA",
+        "OCOBKGXM"
+      ],
+      "html": "\u003c!doctype html\u003e\u003chtml lang=\"en\"\u003e\u003chead\u003e\u003cmeta charset=\"utf-8\"\u003e\u003cmeta name=\"viewport\" content=\"width=device-width,initial-scale=1\"\u003e\u003cmeta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none';\"\u003e\u003ctitle\u003eEdsger word search\u003c/title\u003e\u003cstyle\u003e\n@page{size:letter;margin:16mm}*{box-sizing:border-box}body{margin:0;padding:32px;background:#eef3fb;color:#152238;font:16px/1.5 system-ui,sans-serif}header,main,footer{max-width:760px;margin:auto}header{padding:26px;background:white;border-top:5px solid #276ae5;border-radius:14px}.brand{font-size:11px;font-weight:700;letter-spacing:.16em;color:#276ae5}h1{font-size:30px;line-height:1.2;margin:12px 0;overflow-wrap:anywhere;white-space:pre-wrap}.subtitle,.instructions{font-size:13px;color:#617085}main{margin-top:20px;padding:26px;background:white;border-radius:14px}.grid{width:100%;table-layout:fixed;border-collapse:collapse;font:700 clamp(10px,2.3vw,20px)/1.5 ui-monospace,monospace;text-align:center}.grid td{border:1px solid #dce5f2;padding:3px 0}.found{background:#dbeafe;color:#1349a7;box-shadow:inset 0 0 0 1px #276ae5}.words{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;font-size:13px}.words li{overflow-wrap:anywhere}.coordinates{font-size:11px;columns:2;padding-left:20px}.coordinates li{break-inside:avoid;overflow-wrap:anywhere}footer{font-size:10px;color:#617085;padding:20px 0}@media print{body{background:white;padding:0}header{padding:0 0 12px;border-radius:0}main{padding:0;border-radius:0}h1{font-size:24pt}.grid{font-size:12pt;break-inside:avoid}.grid td{padding:1px 0}.found{background:#dbeafe!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.words{font-size:10pt}.coordinates{font-size:8pt}footer{font-size:8pt}}\n\u003c/style\u003e\u003c/head\u003e\u003cbody\u003e\u003cheader\u003e\u003cp class=\"brand\"\u003eEDSGER · WORD SEARCH\u003c/p\u003e\u003ch1\u003eLinear algebra practice\u003c/h1\u003e\u003cp class=\"subtitle\"\u003e5 words · hard · 8 × 8\u003c/p\u003e\u003c/header\u003e\u003cmain\u003e\u003cp class=\"instructions\"\u003eFind each word in a straight line. Spaces, hyphens and apostrophes are omitted from the grid.\u003c/p\u003e\u003ctable class=\"grid\" aria-label=\"Word search letter grid\"\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eZ\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eJ\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eW\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eU\u003c/td\u003e\u003ctd\u003eF\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eE\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eR\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eM\u003c/td\u003e\u003ctd\u003eL\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eI\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003ctd\u003eT\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eS\u003c/td\u003e\u003ctd\u003eY\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eP\u003c/td\u003e\u003ctd\u003eV\u003c/td\u003e\u003ctd\u003eN\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eA\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eC\u003c/td\u003e\u003ctd\u003eO\u003c/td\u003e\u003ctd\u003eB\u003c/td\u003e\u003ctd\u003eK\u003c/td\u003e\u003ctd\u003eG\u003c/td\u003e\u003ctd\u003eX\u003c/td\u003e\u003ctd\u003eM\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003cul class=\"words\"\u003e\u003cli\u003eMATRIX\u003c/li\u003e\u003cli\u003eVECTOR\u003c/li\u003e\u003cli\u003eSCALAR\u003c/li\u003e\u003cli\u003ePIVOT\u003c/li\u003e\u003cli\u003eRANK\u003c/li\u003e\u003c/ul\u003e\u003c/main\u003e\u003cfooter\u003eEach target has one verified location. Word meanings and theme are not independently verified.\u003cbr\u003eGenerator wordsearch-v1 · Seed 306070584\u003c/footer\u003e\u003c/body\u003e\u003c/html\u003e",
+      "media_type": "text/html; charset=utf-8",
+      "network_requests": false,
+      "offline": true,
+      "placements": [
+        {
+          "cells": [
+            {
+              "column": 7,
+              "row": 7
+            },
+            {
+              "column": 7,
+              "row": 6
+            },
+            {
+              "column": 7,
+              "row": 5
+            },
+            {
+              "column": 7,
+              "row": 4
+            },
+            {
+              "column": 7,
+              "row": 3
+            },
+            {
+              "column": 7,
+              "row": 2
+            }
+          ],
+          "direction": "N",
+          "end": {
+            "column": 7,
+            "row": 2
+          },
+          "start": {
+            "column": 7,
+            "row": 7
+          },
+          "word_id": 0
+        },
+        {
+          "cells": [
+            {
+              "column": 2,
+              "row": 4
+            },
+            {
+              "column": 3,
+              "row": 4
+            },
+            {
+              "column": 4,
+              "row": 4
+            },
+            {
+              "column": 5,
+              "row": 4
+            },
+            {
+              "column": 6,
+              "row": 4
+            },
+            {
+              "column": 7,
+              "row": 4
+            }
+          ],
+          "direction": "E",
+          "end": {
+            "column": 7,
+            "row": 4
+          },
+          "start": {
+            "column": 2,
+            "row": 4
+          },
+          "word_id": 1
+        },
+        {
+          "cells": [
+            {
+              "column": 4,
+              "row": 5
+            },
+            {
+              "column": 4,
+              "row": 4
+            },
+            {
+              "column": 4,
+              "row": 3
+            },
+            {
+              "column": 4,
+              "row": 2
+            },
+            {
+              "column": 4,
+              "row": 1
+            },
+            {
+              "column": 4,
+              "row": 0
+            }
+          ],
+          "direction": "N",
+          "end": {
+            "column": 4,
+            "row": 0
+          },
+          "start": {
+            "column": 4,
+            "row": 5
+          },
+          "word_id": 2
+        },
+        {
+          "cells": [
+            {
+              "column": 2,
+              "row": 6
+            },
+            {
+              "column": 2,
+              "row": 5
+            },
+            {
+              "column": 2,
+              "row": 4
+            },
+            {
+              "column": 2,
+              "row": 3
+            },
+            {
+              "column": 2,
+              "row": 2
+            }
+          ],
+          "direction": "N",
+          "end": {
+            "column": 2,
+            "row": 2
+          },
+          "start": {
+            "column": 2,
+            "row": 6
+          },
+          "word_id": 3
+        },
+        {
+          "cells": [
+            {
+              "column": 7,
+              "row": 4
+            },
+            {
+              "column": 6,
+              "row": 5
+            },
+            {
+              "column": 5,
+              "row": 6
+            },
+            {
+              "column": 4,
+              "row": 7
+            }
+          ],
+          "direction": "SW",
+          "end": {
+            "column": 4,
+            "row": 7
+          },
+          "start": {
+            "column": 7,
+            "row": 4
+          },
+          "word_id": 4
+        }
+      ],
+      "preview_requires_scripts": false,
+      "puzzle_id": "6af63bc0d3c4cd01648fc5af6261a63b23adbf06244a2c0c4aee5afef5d013ea",
+      "puzzle_verified": true,
+      "schema_version": 1,
+      "seed": 306070584,
+      "size": 8,
+      "title": "Linear algebra practice",
+      "words": [
+        {
+          "id": 0,
+          "label": "MATRIX",
+          "letters": "MATRIX"
+        },
+        {
+          "id": 1,
+          "label": "VECTOR",
+          "letters": "VECTOR"
+        },
+        {
+          "id": 2,
+          "label": "SCALAR",
+          "letters": "SCALAR"
+        },
+        {
+          "id": 3,
+          "label": "PIVOT",
+          "letters": "PIVOT"
+        },
+        {
+          "id": 4,
+          "label": "RANK",
+          "letters": "RANK"
+        }
+      ]
+    },
+    "tool": "make_word_search"
+  }
+}

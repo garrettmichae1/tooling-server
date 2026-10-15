@@ -22,7 +22,7 @@ export class WorksheetFixture extends DurableObject {async fetch(request){return
 export default {fetch(request,env){return serve(request,{...env,WORKSHEET_IP_LIMIT:{limit:async()=>({success:true})}});}};`);
  const config=join(dir,'wrangler.json'),output=join(dir,'bundle');
  await writeFile(config,JSON.stringify({name:'worksheet-runtime-fixture',main:harness,compatibility_date:'2026-10-08',compatibility_flags:['nodejs_compat'],durable_objects:{bindings:[{name:'WORKSHEET_ADMISSION',class_name:'AdmissionFixture'},{name:'WORKSHEET_CONTAINER',class_name:'WorksheetFixture'}]},migrations:[{tag:'v1',new_sqlite_classes:['AdmissionFixture','WorksheetFixture']}]}));
- execFileSync(process.execPath,[resolve('node_modules/wrangler/bin/wrangler.js'),'deploy','--config',config,'--dry-run','--outdir',output],{stdio:'pipe',env:{...process.env,WRANGLER_SEND_METRICS:'false',WRANGLER_LOG_PATH:join(dir,'wrangler.log')}});
+ execFileSync(process.execPath,[resolve('node_modules/wrangler/bin/wrangler.js'),'deploy','--config',config,'--dry-run','--containers-rollout','none','--env','','--outdir',output],{stdio:'pipe',env:{...process.env,WRANGLER_SEND_METRICS:'false',WRANGLER_LOG_PATH:join(dir,'wrangler.log')}});
  const options={rootPath:dir,modulesRoot:dir,modules:true,scriptPath:join(output,'harness.js'),compatibilityDate:'2026-10-08',compatibilityFlags:['nodejs_compat'],durableObjects:{WORKSHEET_ADMISSION:{className:'AdmissionFixture',useSQLite:true},WORKSHEET_CONTAINER:{className:'WorksheetFixture',useSQLite:true}},bindings:{FIGURE_TOKEN:token,WORKSHEET_HOST_ENABLED:'true'}};
  let calls=0;
  const make=()=>new Miniflare(convertV4MiniflareOptions({...options,resourcePersistencePath:join(dir,'state'),outboundService:async req=>{

@@ -1,6 +1,6 @@
 # Tool catalog and model integration
 
-All 39 utilities use the same authenticated API without subscription checks or model-provider credentials. No app or worker code is changed. Existing app/gateway policies still determine whether a particular user or model can reach this service.
+All 40 utilities use the same authenticated API without subscription checks or model-provider credentials. Existing app/gateway policies still determine whether a particular user or model can reach this service. The hosted word-search route has independent gates and limits; this server-only integration does not change the iPhone app or payment workers.
 
 ## Tools
 
@@ -40,6 +40,7 @@ All 39 utilities use the same authenticated API without subscription checks or m
 | Developer | `generate_uuid` | Random UUIDv4 identifiers |
 | Study | `make_study_app` | Offline interactive quiz, explanations, retry missed, local progress/export |
 | Study | `make_worksheet` | Written exercises, printable question sheet and separate worked answer key; no scripts |
+| Study | `make_word_search` | Verified word grid, zero-based native placements, printable puzzle and separate answer key; no scripts |
 | Data | `make_data_dashboard` | Offline interactive line/bar chart, toggles, summaries, exact table, CSV |
 | Study | `make_sorting_lab` | Algorithm animation, single steps, server-computed trace/counters |
 | Visuals | `make_pixel_art` | Scaled transparent PNG and SVG sprites from palette indices |
@@ -50,7 +51,7 @@ Live schemas/examples are the source of truth: `GET /v1/tools`, filtered catalog
 
 ## Smaller model integration
 
-The caller selects relevant definitions before inference. Fetch a category or specific definitions; do not paste all legacy art instructions or all 39 schemas into every prompt. Use the served quickstart for common instructions.
+The caller selects relevant definitions before inference. Fetch a category or specific definitions; do not paste all legacy art instructions or all 40 schemas into every prompt. Use the served quickstart for common instructions.
 
 For native function calling, map each descriptor's `name`, `description`, and `input_schema` into the provider's function format. Server validation applies even if the provider ignores constraints. For a model without native function calling, request exactly this JSON shape and have the trusted caller parse it:
 
@@ -82,6 +83,8 @@ The caller must save/share the HTML or display it in an isolated web preview tha
 Dashboard summaries use float64 and charts show supplied categories in supplied order, with sparse/shortened axis labels; the table preserves exact serialized input values. All-negative and zero datasets are supported. CSV exports neutralize text starting with spreadsheet formula markers; numeric values remain numbers. Sorting counts comparisons of array values and array-slot writes; insertion frames can temporarily omit a held value, which the action text identifies. The full trace lives inside the HTML; the result also reports sorted values, counters, and frame count.
 
 Pixel-art alpha is preserved in PNG and SVG. Palette indices describe the supplied grid; this is not image generation. Music uses equal-tempered MIDI pitch strings (48–96), mono sine waves at 16 kHz, and per-note fades. Beat endpoints are rounded cumulatively to samples to limit timing drift. Project planning assumes unlimited parallel workers and elapsed integer minutes, with no calendar or resource constraints. Critical tasks have zero slack; multiple critical paths can exist, so the returned IDs are not necessarily a single chain. It is a plan/export, not task execution.
+
+Word search accepts a caller-supplied word list, not an AI-generated grid or code. The generator verifies one physical straight-line occurrence of each target across all eight directions, including accidental occurrences. It returns every requested word or `generation_failed`; no partial puzzle is returned. Word meanings and theme relevance are not verified. Grid/placement data supports a future native interactive view; the two returned HTML files are script-free printable sheets. Progress belongs to the client, and solution coordinates are visible in the response, so this is practice rather than a secure exam. See [native contract, limits and hosting](WORD_SEARCH_HOSTING.md).
 
 ## Adding tools
 

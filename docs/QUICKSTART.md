@@ -12,6 +12,8 @@ Never put server credentials in a prompt, a tool argument, or a URL. Tools accep
 
 Arithmetic/statistics are approximate float64 unless the tool explicitly returns exact rational/integer strings. Grading compares against a supplied answer key. Flashcards package supplied content without fact-checking. The server does not interpret a natural-language request for you.
 
-The 38 utility tools need no paid AI API or rendering binary. A hosted server still needs connectivity. Legacy posters/PDF/STL tools require their configured renderers; check `renderers` in the catalog before using the full guide at `GET /v1/guide`.
+The 40 utility tools need no paid AI API or rendering binary. A hosted server still needs connectivity. Legacy posters/PDF/STL tools require their configured renderers; check `renderers` in the catalog before using the full guide at `GET /v1/guide`.
 
 For take-away artifacts, use `make_study_app`, `make_data_dashboard`, or `make_sorting_lab` for offline HTML; `make_pixel_art` for PNG/SVG; `make_music_sequence` for WAV; `plan_project` for dependency schedules. The caller saves/previews returned files. Preview HTML on an isolated origin with scripts enabled and no app credentials. Review supplied quiz keys; facts are not verified.
+
+For `make_word_search`, provide a title, 1–30 words and `easy`, `medium` or `hard` difficulty. Supply words only; the server builds and verifies the grid. Use English ASCII letters with spaces, hyphens or apostrophes; normalized words must have 3–18 letters and be distinct, including reverse pairs. The result contains native cell coordinates and separate script-free printable puzzle/key sheets. If generation fails, retain the words and try a larger grid or a different seed; do not claim a partial puzzle succeeded. [Caller contract](WORD_SEARCH_HOSTING.md).

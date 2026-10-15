@@ -18,9 +18,16 @@ import (
 )
 
 func main() {
+	if os.Getenv("WORKSHEET_ONLY") == "true" && os.Getenv("WORD_SEARCH_ONLY") == "true" {
+		fmt.Fprintln(os.Stderr, "invalid_tool_selector")
+		os.Exit(1)
+	}
 	handler, err := studyhost.New(os.Getenv("FIGURE_TOKEN"))
 	if os.Getenv("WORKSHEET_ONLY") == "true" {
 		handler, err = studyhost.NewWorksheet(os.Getenv("FIGURE_TOKEN"))
+	}
+	if os.Getenv("WORD_SEARCH_ONLY") == "true" {
+		handler, err = studyhost.NewWordSearch(os.Getenv("FIGURE_TOKEN"))
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "invalid_origin_credential")
