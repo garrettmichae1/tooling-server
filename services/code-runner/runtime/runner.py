@@ -74,6 +74,27 @@ def terminate(process):
         pass
     process.wait(timeout=2)
 
+def bounded_console(captured, maximum):
+    """Decode complete stream captures within one combined UTF-8 byte budget."""
+    output = {}
+    remaining = maximum
+    truncated = False
+    for name, value in captured.items():
+        data = bytes(value).decode("utf-8", "replace").encode()
+        output[name] = data[:remaining].decode("utf-8", "ignore")
+        if len(data) > remaining:
+            truncated = True
+        remaining -= len(output[name].encode())
+    return output, truncated
+
+def reject_preview(result, message):
+    """Keep compiler output when adding a bounded preview failure diagnostic."""
+    separator = "\n" if result["stderr"] and not result["stderr"].endswith("\n") else ""
+    output, truncated = bounded_console({"stdout": result["stdout"].encode(), "stderr": (result["stderr"] + separator + message).encode()}, MAX_OUTPUT)
+    result.update(output, status="failed", exitCode=1)
+    result["truncated"] = result["truncated"] or truncated
+    result.pop("previewHTML", None)
+
 def command(argv, cwd, env, deadline, stdin="", maximum=MAX_OUTPUT):
     """Argv-only invocation, bounded output while reading, and whole process-group kill."""
     process = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=child_limits)
@@ -133,10 +154,12 @@ def command(argv, cwd, env, deadline, stdin="", maximum=MAX_OUTPUT):
         for stream in (process.stdin, process.stdout, process.stderr):
             if not stream.closed:
                 stream.close()
-    # Replacing invalid UTF-8 can expand byte count. Keep the protocol's bound.
-    output = {name: bytes(value).decode("utf-8", "replace") for name, value in captured.items()}
-    for name in output:
-        output[name] = output[name].encode()[:maximum // 2].decode("utf-8", "ignore")
+    # Replacement characters can expand the captured bytes. Both streams share
+    # the protocol's UTF-8 budget; a quiet stream leaves its room to the other.
+    output, decoded_truncated = bounded_console(captured, maximum)
+    truncated = truncated or decoded_truncated
+    if truncated and status == "completed":
+        status = "failed"
     code = 124 if status == "timeout" else max(-255, min(255, process.returncode or 0))
     return dict(status=status, exitCode=code, truncated=truncated, **output)
 
@@ -256,25 +279,23 @@ def execute(raw, deadline_seconds=DEADLINE_SECONDS):
             for index, argv in enumerate(stages):
                 stdin = value["stdin"] if index == len(stages) - 1 else ""
                 if value["language"] == "sql": stdin = (root / value["entrypoint"]).read_text() + "\n" + stdin
-                stage = command(argv, root, env, deadline, stdin)
                 remaining = MAX_OUTPUT - len((result["stdout"] + result["stderr"]).encode())
+                stage = command(argv, root, env, deadline, stdin, maximum=remaining)
                 for name in ("stdout", "stderr"):
-                    data = stage[name].encode()
-                    if len(data) > remaining: stage["truncated"] = True
-                    result[name] += data[:remaining].decode("utf-8", "ignore")
-                    remaining -= min(len(data), remaining)
-                result.update({k: stage[k] for k in ("status", "exitCode", "truncated")})
+                    result[name] += stage[name]
+                result.update({k: stage[k] for k in ("status", "exitCode")})
+                result["truncated"] = result["truncated"] or stage["truncated"]
                 if stage["status"] != "completed": break
             if value["mode"] == "preview" and result["status"] == "completed":
                 script = (root / ".build/preview.js").read_bytes()
                 css_path = root / ".build/preview.css"
                 css = css_path.read_text() if css_path.exists() else ""
                 if len(script) + len(css.encode()) > MAX_PREVIEW - 1024:
-                    result.update(status="failed", stderr="Preview exceeds the size limit. Use a smaller bundle.", exitCode=1)
+                    reject_preview(result, "Preview exceeds the size limit. Use a smaller bundle.")
                 else:
                     result["previewHTML"] = '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + css.replace("</style", "<\\/style") + '</style></head><body><div id="root"></div><div id="app"></div><script>' + script.decode().replace("</script", "<\\/script") + "</script></body></html>"
         if len(result.get("previewHTML", "").encode()) > MAX_PREVIEW:
-            result = dict(status="failed", stdout="", stderr="Preview exceeds the size limit.", exitCode=1, truncated=False)
+            reject_preview(result, "Preview exceeds the size limit.")
         return dict(language=value["language"], **result)
     finally:
         shutil.rmtree(root, ignore_errors=True)
