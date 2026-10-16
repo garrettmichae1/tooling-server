@@ -2,7 +2,10 @@ import { DurableObject } from "cloudflare:workers";
 import { executionInput, executionResult, json, readJSON, LIFETIME_MS, REVISION, UUID, MAX_REQUEST_BYTES, LANGUAGES, type Language } from "./contract";
 import { forwardJob } from "./runtime-errors";
 import { CONSOLE_REVISION, consoleInput, consoleResponse, interactiveExecutionInput } from "./console";
+import { ADMISSION_LEASE_HEADER } from "./admission";
 export { CodeAdmission } from "./admission";
+const ADMISSION_JOB_HEADER = "X-Edsger-Admission-Job";
+type BatchAdmission = {id: string; token: string};
 interface Env { CODE_RUNNER_ENABLED?: string; CODE_RUNNER_INTERACTIVE_ENABLED?: string; CODE_CORE_JOB: DurableObjectNamespace; CODE_SYSTEMS_JOB: DurableObjectNamespace; CODE_JVM_JOB: DurableObjectNamespace; CODE_DOTNET_JOB: DurableObjectNamespace; CODE_SWIFT_JOB: DurableObjectNamespace; CODE_ADMISSION: DurableObjectNamespace }
 const PROFILE: Record<Language, keyof Pick<Env, "CODE_CORE_JOB" | "CODE_SYSTEMS_JOB" | "CODE_JVM_JOB" | "CODE_DOTNET_JOB" | "CODE_SWIFT_JOB">> = {
   c: "CODE_SYSTEMS_JOB", cpp: "CODE_SYSTEMS_JOB", go: "CODE_SYSTEMS_JOB", rust: "CODE_SYSTEMS_JOB",
@@ -37,16 +40,22 @@ export async function serve(request: Request, env: Env, ctx?: ExecutionContext):
   if (!namespace) return json({error: "service_unavailable"}, 503);
   const job = namespace.get(namespace.idFromName(id));
   const admission = env.CODE_ADMISSION.get(env.CODE_ADMISSION.idFromName("global-v1"));
-  const admitted = await admission.fetch(new Request(`https://admission/${id}`, {method: "POST"}));
+  const batchLease = !route ? crypto.randomUUID() : undefined;
+  const admitted = await admission.fetch(new Request(`https://admission/${id}`, {method: "POST", headers: batchLease ? {[ADMISSION_LEASE_HEADER]: batchLease} : undefined}));
   if (!admitted.ok) return admitted;
+  await admitted.body?.cancel();
   let releasing: Promise<void> | undefined;
   const release = () => releasing ??= (async () => {
     const response = await admission.fetch(new Request(`https://admission/${id}`, {method: "DELETE"}));
     await response.body?.cancel();
   })();
   if (!route) {
-    try { return await forwardJob(job, new Request("https://job/run", {method: "POST", body: JSON.stringify(input), signal: request.signal})); }
-    finally { await release(); }
+    // The actor owns batch release, after platform destruction succeeds. A lost
+    // RPC or even a plausible result/ACK cannot prove the instance has stopped.
+    // Refusals before the actor runs conservatively retain the bounded lease.
+    return forwardJob(job, new Request("https://job/run", {method: "POST", headers: {
+      [ADMISSION_JOB_HEADER]: id, [ADMISSION_LEASE_HEADER]: batchLease!,
+    }, body: JSON.stringify(input), signal: request.signal}));
   }
   const stopped = new AbortController();
   let stopping: Promise<boolean> | undefined;
@@ -115,6 +124,7 @@ export default {fetch: serve};
 
 class CodeJob extends DurableObject<Env> {
   protected languages: readonly string[] = [];
+  private batchFinishing?: Promise<void>;
   private live?: {
     language: Language; key: string; ready: boolean; stopped: AbortController;
     timer: ReturnType<typeof setTimeout>; start: number; pendingInputs: number;
@@ -130,6 +140,7 @@ class CodeJob extends DurableObject<Env> {
     if (request.method === "DELETE" && new URL(request.url).pathname === "/cancel") {
       await this.ctx.storage.put("cancelled", true);
       if (this.live) { this.live.stopped.abort(); await this.live.finish(); }
+      else if (await this.ctx.storage.get("batchAdmission")) await this.finishBatch();
       else await this.ctx.container?.destroy();
       return json({cancelled: true});
     }
@@ -137,8 +148,13 @@ class CodeJob extends DurableObject<Env> {
     let input;
     try { input = executionInput(await readJSON(request)); } catch { return json({error: "invalid_request"}, 400); }
     if (!this.languages.includes(input.language)) return json({error: "invalid_request"}, 400);
+    const admissionID = request.headers.get(ADMISSION_JOB_HEADER), admissionToken = request.headers.get(ADMISSION_LEASE_HEADER);
+    if ((admissionID !== null || admissionToken !== null) && (!admissionID || !admissionToken || !UUID.test(admissionID) || !UUID.test(admissionToken) || !this.env.CODE_ADMISSION)) return json({error: "invalid_request"}, 400);
     const admitted = await this.ctx.storage.transaction(async tx => {
       if (await tx.get("used") || await tx.get("cancelled")) return false;
+      // Durable cleanup identity precedes launch, so alarm/cancel recovery after
+      // an actor restart releases only the original admission epoch.
+      if (admissionID && admissionToken) await tx.put("batchAdmission", {id: admissionID, token: admissionToken} satisfies BatchAdmission);
       await tx.put("used", true); await tx.setAlarm(Date.now() + LIFETIME_MS);
       return true;
     });
@@ -146,6 +162,9 @@ class CodeJob extends DurableObject<Env> {
     const start = performance.now();
     let result: ReturnType<typeof executionResult> | undefined;
     try {
+      // Cancel can interleave with the admission transaction. Never start an
+      // instance after a concurrent cancellation already confirmed shutdown.
+      if (await this.ctx.storage.get("cancelled")) throw Error("cancelled");
       this.ctx.container.start({enableInternet: false});
       await this.ctx.container.setInactivityTimeout(LIFETIME_MS);
       const port = this.ctx.container.getTcpPort(8080), deadline = performance.now() + 12_000;
@@ -163,9 +182,36 @@ class CodeJob extends DurableObject<Env> {
     } finally {
       // destroy is a hard termination. SIGTERM alone would let hostile code
       // delay shutdown. No instance or disk is reused for another execution.
-      await this.ctx.container.destroy(); await this.ctx.storage.deleteAlarm();
+      try { await this.finishBatch(); }
+      catch { return json({error: "runner_unavailable"}, 502); }
     }
     return json({execution: result, elapsedMs: Math.min(LIFETIME_MS, Math.max(1, Math.ceil(performance.now() - start))), revision: REVISION});
+  }
+  private async finishBatch(): Promise<void> {
+    if (this.batchFinishing) return this.batchFinishing;
+    const finishing = this.batchFinishing = (async () => {
+      if (!await this.ctx.storage.get("batchStopped")) {
+        await this.ctx.container!.destroy();
+        await this.ctx.storage.put("batchStopped", true);
+      }
+      const admission = await this.ctx.storage.get<BatchAdmission>("batchAdmission");
+      if (admission && !await this.ctx.storage.get("batchReleased")) {
+        const namespace = this.env.CODE_ADMISSION;
+        const response = await namespace.get(namespace.idFromName("global-v1")).fetch(new Request(`https://admission/${admission.id}`, {
+          method: "DELETE", headers: {[ADMISSION_LEASE_HEADER]: admission.token}, signal: AbortSignal.timeout(5000),
+        }));
+        await response.body?.cancel();
+        // A mismatched epoch belongs to a later lease and must remain intact.
+        // It also means this original lease no longer needs release.
+        if (!response.ok && response.status !== 409) throw Error("admission_unavailable");
+        await this.ctx.storage.put("batchReleased", true);
+      }
+      // Keep the safety alarm on destruction or release failure. A retried
+      // alarm can finish idempotently; the original lease also bounds a lost RPC.
+      await this.ctx.storage.deleteAlarm();
+    })();
+    try { await finishing; }
+    finally { if (this.batchFinishing === finishing) this.batchFinishing = undefined; }
   }
   private async runStream(request: Request): Promise<Response> {
     let input;
@@ -282,6 +328,7 @@ class CodeJob extends DurableObject<Env> {
   async alarm(): Promise<void> {
     await this.ctx.storage.put("cancelled", true);
     if (this.live) { this.live.stopped.abort(); await this.live.finish(); }
+    else if (await this.ctx.storage.get("batchAdmission")) await this.finishBatch();
     else await this.ctx.container?.destroy();
   }
 }
