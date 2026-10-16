@@ -245,3 +245,15 @@ test('escaped NUL remains valid console output and exact final transcript', asyn
   await consumeConsole(new ReadableStream({start(c) {for (const value of frames) c.enqueue(value); c.close()}}),'python',false,value=>accepted.push(value));
   assert.equal(accepted.length,2); assert.equal(accepted[1].execution.stdout,'hello\0world');
 });
+
+test('duplicate stream rejection remains readable after cancellation cleanup aborts the original RPC', async () => {
+  const events=[];
+  const env={CODE_RUNNER_ENABLED:'true',CODE_RUNNER_INTERACTIVE_ENABLED:'true',CODE_ADMISSION:namespace(async req=>{events.push(req.method);return Response.json({})}),CODE_CORE_JOB:namespace(async req=>{
+    if(req.method==='DELETE')return Response.json({cancelled:true});
+    let sent=false;
+    const body=new ReadableStream({start(controller){req.signal.addEventListener('abort',()=>controller.error(Error('RPC response aborted')),{once:true})},pull(controller){if(sent)controller.close();else{sent=true;controller.enqueue(new TextEncoder().encode(JSON.stringify({error:'duplicate_request'})))}}});
+    return new Response(body,{status:409,headers:{'Content-Type':'application/json'}});
+  })};
+  const response=await serve(new Request(`https://runner/${uuid}/stream`,{method:'POST',headers,body:JSON.stringify(input)}),env);
+  assert.equal(response.status,409);assert.deepEqual(await response.json(),{error:'duplicate_request'});assert.deepEqual(events,['POST','DELETE']);
+});
