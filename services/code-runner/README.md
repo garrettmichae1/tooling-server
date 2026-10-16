@@ -113,3 +113,35 @@ remain deployed. Do not remove bindings or migrate/delete actors while jobs are 
 Turning off new starts does not stop all active jobs immediately: Stop and the
 45-second alarm terminate them. An already-enabled paid Cloudflare account is
 required; usage and deployment/image limits are subject to that account's billing.
+
+## Optional live console
+
+`edsger-console-v1` adds progressive stdout/stderr and ordered, line-based stdin
+for Run jobs (HTML previews and SQL retain the batch path). The purchase backend
+uses private `POST /{job}/stream` and `POST /{job}/input`; every new route requires
+the exact execution and console revisions. Input routing also requires the job's
+trusted stored language. Batch execution and DELETE cancellation remain compatible.
+
+`CODE_RUNNER_INTERACTIVE_ENABLED` ships **false** in production and sandbox.
+Enable it only as part of the separately approved paired-backend rollout after
+real container/device checks. An older or disabled service keeps the batch UI.
+
+The controller receives a per-job random session key in an HTTP header. The key
+stays in controller/actor memory, never in guest environment variables, guest
+files, public frames or persistent storage. A fixed non-secret runtime feature
+gate is the only additional container environment variable. Live input has the
+same combined 8 KiB budget (including prefilled lines), at most 128 ordered
+commands and explicit EOF; exact retries ACK without writing or echoing twice.
+Input shares the original run and allowance reservation. There is no restart.
+
+A stream holds global admission until a validated final and confirmed instance
+destruction, or confirmed Stop. If shutdown cannot be confirmed promptly, its
+slot remains reserved until the existing lease expires. The 30-second program
+limit, 45-second hard alarm, eight-job global cap and denied egress remain in
+force while a program waits for input. Results appear only after clean stream
+completion and cleanup; source, stdin and stdout remain ephemeral.
+
+Local console tests can be run explicitly with `node tests/console.test.mjs` and
+`node tests/worker.test.mjs`, followed by `npm run typecheck` and the Python runner
+tests. These checks use mocked Worker/container bindings; they do not replace
+the staged sandbox and physical-device acceptance checks.
