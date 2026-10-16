@@ -26,6 +26,7 @@ import sys
 import tempfile
 import threading
 import time
+import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 LANGUAGES = ("c", "cpp", "python", "javascript", "typescript", "lua", "java", "csharp", "go", "rust", "ruby", "php", "kotlin", "swift", "r", "perl", "bash", "sql", "html")
@@ -179,6 +180,107 @@ def environment(root):
     # Never inherit the controller/process environment, proxies or credentials.
     return {"PATH": "/opt/python/bin:/opt/node/bin:/opt/go/bin:/opt/rust/bin:/opt/dotnet:/usr/local/swift/usr/bin:/usr/local/bin:/usr/bin:/bin", "HOME": str(root), "TMPDIR": str(root / ".build"), "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONUNBUFFERED": "1", "PYTHONDONTWRITEBYTECODE": "1", "MPLBACKEND": "Agg", "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1", "NODE_PATH": "/opt/node-libraries/node_modules", "DOTNET_ROOT": "/opt/dotnet", "DOTNET_CLI_TELEMETRY_OPTOUT": "1", "DOTNET_SKIP_FIRST_TIME_EXPERIENCE": "1", "DOTNET_NOLOGO": "1", "DOTNET_PROCESSOR_COUNT": "1", "DOTNET_CLI_USE_MSBUILD_SERVER": "0", "MSBUILDDISABLENODEREUSE": "1", "MSBuildEnableWorkloadResolver": "false", "DOTNET_GCHeapHardLimit": "80000000", "DOTNET_gcServer": "0", "DOTNET_GCHeapCount": "1", "GOCACHE": str(root / ".build/go-cache"), "GOMODCACHE": "/opt/go-modules", "GOPROXY": "off", "GOSUMDB": "off", "GOTOOLCHAIN": "local", "GOMEMLIMIT": "2GiB", "CARGO_HOME": "/opt/rust/cargo", "RUSTUP_HOME": "/opt/rust/rustup", "CARGO_NET_OFFLINE": "true", "JAVA_TOOL_OPTIONS": "-Xmx2g -XX:ActiveProcessorCount=1"}
 
+def java_package(source):
+    """Read a package declaration from Java tokens, after Unicode translation.
+
+    Comments, string/character literals and text blocks cannot supply launcher
+    names. javac remains responsible for validating the complete compilation unit.
+    """
+    translated = []
+    index = backslashes = 0
+    escaped = False
+    while index < len(source):
+        char = source[index]
+        if char == "\\":
+            end = index + 1
+            while end < len(source) and source[end] == "u":
+                end += 1
+            digits = source[end:end + 4]
+            if (escaped or backslashes % 2 == 0) and end > index + 1 and len(digits) == 4 and all(c in "0123456789abcdefABCDEF" for c in digits):
+                char = chr(int(digits, 16))
+                index = end + 4
+                escaped = True
+                backslashes = backslashes + 1 if char == "\\" else 0
+                translated.append(char)
+                continue
+            backslashes += 1
+        else:
+            backslashes = 0
+        escaped = False
+        translated.append(char)
+        index += 1
+    # Java identifiers are Unicode code points, including surrogate pairs
+    # produced by separate \u escapes in the raw source.
+    source = "".join(translated).encode("utf-16-le", "surrogatepass").decode("utf-16-le", "surrogatepass")
+
+    def identifier_start(char):
+        return char in "_$" or unicodedata.category(char) in ("Lu", "Ll", "Lt", "Lm", "Lo", "Nl", "Sc", "Pc")
+
+    def identifier_ignorable(char):
+        point = ord(char)
+        return point <= 8 or 14 <= point <= 27 or 127 <= point <= 159 or unicodedata.category(char) == "Cf"
+
+    def identifier_part(char):
+        return identifier_start(char) or unicodedata.category(char) in ("Mn", "Mc", "Nd") or identifier_ignorable(char)
+
+    tokens = []
+    index = 0
+    while index < len(source):
+        char = source[index]
+        if char.isspace():
+            index += 1
+        elif source.startswith("//", index):
+            endings = [position for ending in ("\r", "\n") if (position := source.find(ending, index + 2)) >= 0]
+            index = min(endings) + 1 if endings else len(source)
+        elif source.startswith("/*", index):
+            end = source.find("*/", index + 2)
+            index = len(source) if end < 0 else end + 2
+        elif char in "\"'":
+            delimiter = '"""' if source.startswith('"""', index) else char
+            index += len(delimiter)
+            while index < len(source):
+                if source[index] == "\\":
+                    index += 2
+                elif source.startswith(delimiter, index):
+                    index += len(delimiter)
+                    break
+                else:
+                    index += 1
+            tokens.append("<literal>")
+        elif identifier_start(char):
+            end = index + 1
+            while end < len(source) and identifier_part(source[end]):
+                end += 1
+            # javac removes ignorable characters when it emits binary names.
+            tokens.append("".join(c for c in source[index:end] if not identifier_ignorable(c)))
+            index = end
+        else:
+            tokens.append(char)
+            index += 1
+    depth = 0
+    for index, token in enumerate(tokens):
+        if token in ("(", "{", "["):
+            depth += 1
+        elif token in (")", "}", "]"):
+            depth -= 1
+        elif depth == 0 and token == "package":
+            parts = []
+            name_expected = True
+            for part in tokens[index + 1:]:
+                if part == ";":
+                    return ".".join(parts) if parts and not name_expected else ""
+                if name_expected and part and identifier_start(part[0]) and all(identifier_part(c) for c in part):
+                    parts.append(part)
+                elif not name_expected and part == ".":
+                    pass
+                else:
+                    return ""
+                name_expected = not name_expected
+            return ""
+        elif depth == 0 and token in ("import", "class", "interface", "enum", "record", "module"):
+            return ""
+    return ""
+
 def plans(value, root):
     language = value["language"]
     entry = value["entrypoint"]
@@ -196,8 +298,8 @@ def plans(value, root):
     if language == "lua": return [["lua5.4", entry]]
     if language == "java":
         text = (root / entry).read_text()
-        package = re.search(r"(?m)^\s*package\s+([A-Za-z_][\w.]*)\s*;", text)
-        name = (package.group(1) + "." if package else "") + Path(entry).stem
+        package = java_package(text)
+        name = (package + "." if package else "") + Path(entry).stem
         return [["javac", "-d", ".build", *sources("java")], ["java", "-cp", ".build", name]]
     if language == "csharp":
         projects = sources("csproj")
