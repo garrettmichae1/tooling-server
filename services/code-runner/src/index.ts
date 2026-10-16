@@ -87,10 +87,21 @@ export async function serve(request: Request, env: Env, ctx?: ExecutionContext):
       "X-Edsger-Console-Revision": CONSOLE_REVISION,
     }, body: JSON.stringify(input), signal: stopped.signal}));
     if (!response.ok) {
+      // RPC response bodies share their fetch's signal. Consume and validate a
+      // tiny rejection before aborting cleanup, then return an independent body.
+      // Otherwise a safe duplicate rejection becomes an unreadable transport
+      // error even though the original job correctly cannot restart.
+      let rejection = json({error: "runner_unavailable"}, 502);
+      try {
+        const value = await readJSON(response, 2048) as Record<string, unknown>;
+        const allowed: Record<number, string> = {400: "invalid_request", 409: "duplicate_request", 429: "capacity_limited", 502: "runner_unavailable", 503: "service_unavailable"};
+        const code = allowed[response.status];
+        if (code && value && Object.keys(value).length === 1 && value.error === code) rejection = json({error: code}, response.status);
+      } catch {}
       // Platform/transport failures can happen after launch. Prove destruction
       // before reusing its global slot; explicit pre-launch rejections are safe.
-      if (![400, 429, 503].includes(response.status)) abort();
-      await finish(); return response;
+      if (![400, 429, 503].includes(rejection.status)) abort();
+      await finish(); return rejection;
     }
     if (response.headers.get("Content-Type")?.split(";", 1)[0] !== "application/x-ndjson" || !response.body) {
       abort(); void response.body?.cancel().catch(() => {});

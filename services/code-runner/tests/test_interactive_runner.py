@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import threading
@@ -69,8 +70,8 @@ class RunningConsole:
     def ready(self):
         self.wait(lambda frames: any(frame["type"] == "ready" for frame in frames))
 
-    def output(self, text):
-        self.wait(lambda frames: text in "".join(frame.get("text", "") for frame in frames))
+    def output(self, text, timeout=3):
+        self.wait(lambda frames: text in "".join(frame.get("text", "") for frame in frames), timeout=timeout)
 
     def send(self, sequence, text="", eof=False):
         return self.channel.submit(dict(sequence=sequence, text=text, eof=eof))
@@ -163,6 +164,127 @@ class InteractiveRunnerTests(unittest.TestCase):
         console.output("number: ")
         console.send(1, "21\n")
         self.assertEqual(self.assert_transcript(console)["stdout"], "number: 21\ndouble=42\n")
+
+    @contextlib.contextmanager
+    def java_console(self, source):
+        java = shutil.which("java")
+        if not java:
+            self.skipTest("Local Java runtime unavailable")
+        javac = shutil.which("javac")
+        if not javac:
+            modules = subprocess.run([java, "--list-modules"], capture_output=True, text=True, timeout=5, check=True).stdout
+            if not any(line.startswith("jdk.compiler@") for line in modules.splitlines()):
+                self.skipTest("Local Java compiler unavailable")
+        actual_plans = runner.plans
+
+        def local_java_plan(value, root):
+            stages = actual_plans(value, root)
+            if not javac:
+                # Some local JDK installations include the real compiler module
+                # without its javac executable. Only adapt that trusted launcher;
+                # staging, javac arguments, Java execution, limits, and all console
+                # transport remain the production code paths.
+                stages[0] = [java, "-m", "jdk.compiler/com.sun.tools.javac.Main", *stages[0][1:]]
+            return stages
+
+        with mock.patch.object(runner, "plans", side_effect=local_java_plan):
+            console = RunningConsole(payload(source, language="java", entrypoint="Main.java"), deadline=12)
+            try:
+                yield console
+            finally:
+                if console.thread.is_alive():
+                    console.channel.cancelled.set()
+                    console.thread.join(timeout=2)
+
+    def test_java_scanner_accepts_sequential_numeric_and_unicode_string_responses(self):
+        source = '''import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.Scanner;
+public class Main {
+  public static void main(String[] args) {
+    try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
+      scanner.useLocale(Locale.ROOT);
+      System.out.print("Count? ");
+      int count = scanner.nextInt(); scanner.nextLine();
+      System.out.print("Name? ");
+      String name = scanner.nextLine();
+      System.out.print("Scale? ");
+      double scale = scanner.nextDouble(); scanner.nextLine();
+      System.out.print("Comment? ");
+      String comment = scanner.nextLine();
+      System.out.println("Result: " + count + " | " + name + " | " + scale + " | " + comment);
+    }
+  }
+}
+'''
+        with self.java_console(source) as console:
+            console.output("Count? ", timeout=8)
+            self.assertEqual(console.channel.total, 0)
+            self.assertIsNone(console.result)
+            self.assertEqual(console.send(1, "7\n"), dict(accepted=True, sequence=1))
+            console.output("Name? ")
+            console.send(2, "Zoë 漢🙂\n")
+            console.output("Scale? ")
+            console.send(3, "2.5\n")
+            console.output("Comment? ")
+            console.send(4, "ready to learn\n")
+            result = self.assert_transcript(console)
+        self.assertEqual(result["status"], "completed")
+        self.assertEqual(result["exitCode"], 0)
+        self.assertEqual(result["stdout"], "Count? 7\nName? Zoë 漢🙂\nScale? 2.5\nComment? ready to learn\nResult: 7 | Zoë 漢🙂 | 2.5 | ready to learn\n")
+
+    def test_java_scanner_receives_explicit_eof_with_or_without_a_response(self):
+        source = '''import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+public class Main {
+  public static void main(String[] args) {
+    try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
+      while (true) {
+        System.out.print("Line? ");
+        if (!scanner.hasNextLine()) { System.out.println("EOF"); break; }
+        System.out.println("Read: " + scanner.nextLine());
+      }
+    }
+  }
+}
+'''
+        for response in (None, "Héllo 漢🙂"):
+            with self.subTest(response=response), self.java_console(source) as console:
+                console.output("Line? ", timeout=8)
+                self.assertIsNone(console.result)
+                sequence = 1
+                expected = "Line? "
+                if response is not None:
+                    console.send(sequence, response + "\n")
+                    sequence += 1
+                    console.output("Read: " + response + "\nLine? ")
+                    expected += response + "\nRead: " + response + "\nLine? "
+                self.assertEqual(console.send(sequence, eof=True), dict(accepted=True, sequence=sequence))
+                result = self.assert_transcript(console)
+                self.assertEqual(result["status"], "completed")
+                self.assertEqual(result["stdout"], expected + "EOF\n")
+
+    def test_java_system_in_reads_queued_unicode_bytes_until_real_eof(self):
+        source = '''import java.nio.charset.StandardCharsets;
+public class Main {
+  public static void main(String[] args) throws Exception {
+    System.out.print("Text? ");
+    byte[] data = System.in.readAllBytes();
+    System.out.println("Bytes=" + data.length);
+    System.out.print(new String(data, StandardCharsets.UTF_8));
+  }
+}
+'''
+        text = "漢🙂 café\n"
+        with self.java_console(source) as console:
+            console.output("Text? ", timeout=8)
+            console.send(1, "漢🙂")
+            console.send(2, " café\n")
+            self.assertIsNone(console.result)
+            console.send(3, eof=True)
+            result = self.assert_transcript(console)
+        self.assertEqual(result["status"], "completed")
+        self.assertEqual(result["stdout"], "Text? " + text + "Bytes=" + str(len(text.encode())) + "\n" + text)
 
     def test_compile_failure_never_claims_ready_or_consumes_user_input(self):
         compiler = [["/usr/bin/python3", "-c", "import sys; print('compile error', file=sys.stderr); sys.exit(3)"], ["/usr/bin/python3", "-c", "print('must not run')"]]

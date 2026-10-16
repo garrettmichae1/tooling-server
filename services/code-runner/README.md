@@ -145,3 +145,25 @@ Local console tests can be run explicitly with `node tests/console.test.mjs` and
 `node tests/worker.test.mjs`, followed by `npm run typecheck` and the Python runner
 tests. These checks use mocked Worker/container bindings; they do not replace
 the staged sandbox and physical-device acceptance checks.
+
+### October 16 sandbox qualification
+
+The sandbox runner is deployed with live console enabled and five verified
+immutable controller-update images. All 17 interactive language examples passed
+real prompts/ordered input/EOF on Cloudflare, including Java Scanner car details.
+Stop/replay, retry/limits/isolation, eight held streams with ninth admission
+rejected, the real input-wait timeout and legacy batch/SQL/preview checks passed.
+Production remains on its earlier batch images and Worker.
+
+Qualification found and fixed a rejection-body lifetime edge case: the runner
+now buffers and validates a bounded fixed error before aborting its original RPC
+during cleanup, then returns an independent response. Unknown replies remain
+uncertain; admission still waits for confirmed destruction or lease expiry.
+Local checks now pass 15 console cases, seven existing Worker cases and 58 Python
+tests including real Java input. Independent review found no blocker.
+
+The paired app repository's
+[rollout record](https://github.com/garrettmichae1/friendly-potato/blob/main/Docs/LIVE_CONSOLE_ROLLOUT_20261016.md)
+contains active versions, image digests, preserved settings, device instructions
+and rollback. Source flags remain false; never overwrite verified live settings
+with those defaults. No hosted CI or paid AI-provider call was made.
